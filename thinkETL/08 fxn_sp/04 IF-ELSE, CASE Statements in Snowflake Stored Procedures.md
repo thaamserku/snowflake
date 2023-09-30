@@ -228,6 +228,6 @@ CALL sp_demo_simple_case('USA');
 ```
 
 
-SP_DEMO_SIMPLE_CASE
-
-The currency of country USA is DOLLAR
+|SP_DEMO_SIMPLE_CASE|
+|-|
+|The currency of country USA is DOLLAR|
