@@ -69,7 +69,9 @@ CALL sp_demo_if(11,425,35);
 
 
 SP_DEMO_IF
+
 Maximum Number: 435
+
 ## CASE Statement
 
 **CASE statement in Snowflake lets you define different conditions using WHEN clause and returns a value when first condition is met. This is also referred as Searched CASE statement.**
@@ -124,6 +126,7 @@ CALL sp_demo_case(11,425,35);
 ```
 
  SP_DEMO_CASE
+ 
  Maximum Number: 425
 
 
@@ -188,6 +191,7 @@ CALL sp_demo_searched_case('India');
 
 
 SP_DEMO_SEARCHED_CASE
+
 The currency of country INDIA is RUPEE
 
 The following is the same procedure built using the **Simple CASE** statement.
@@ -225,4 +229,5 @@ CALL sp_demo_simple_case('USA');
 
 
 SP_DEMO_SIMPLE_CASE
+
 The currency of country USA is DOLLAR
