@@ -190,9 +190,9 @@ CALL sp_demo_searched_case('India');
 ```
 
 
-SP_DEMO_SEARCHED_CASE
-
-The currency of country INDIA is RUPEE
+|SP_DEMO_SEARCHED_CASE|
+|-|
+|The currency of country INDIA is RUPEE|
 
 The following is the same procedure built using the **Simple CASE** statement.
 
