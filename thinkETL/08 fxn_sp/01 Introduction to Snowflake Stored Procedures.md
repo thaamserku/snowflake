@@ -143,10 +143,10 @@ AS
 
 Let us break down each block of the stored procedure below to understand better.
 
-  - The name of the stored procedure is `_purge_data_` and do not take any input parameters.
-  - The data type of the return value from store procedure is defined as `_varchar_`.
-  - The language is defined as `_SQL_`, the language in which the procedure body is defined.
-  - A variable named `_message_` of type `_varchar_` is defined under DECLARE section of the body.
+  - The name of the stored procedure is `purge_data` and do not take any input parameters.
+  - The data type of the return value from store procedure is defined as `varchar`.
+  - The language is defined as `SQL`, the language in which the procedure body is defined.
+  - A variable named `message` of type `varchar` is defined under DECLARE section of the body.
   - Between BEGIN…END section of the procedure body,
 
     -   The statement to delete the records with INACTIVE status is defined. The variable message is assigned a string value. The assignment operator used is `:=` for assigning value to variable.
@@ -157,7 +157,7 @@ Let us break down each block of the stored procedure below to understand better.
 
 Consider another scenario where you wanted to purge the data from a table based on an input you passed. Let us understand with an example.
 
-The below Stored Procedure deletes all records with status value that matches the value passed as an input through an input parameter `_in_status_` from the employees table.
+The below Stored Procedure deletes all records with status value that matches the value passed as an input through an input parameter `in_status` from the employees table.
 
 ```sql
 CREATE OR REPLACE PROCEDURE purge_data_by_status(in_status VARCHAR)
@@ -178,8 +178,8 @@ AS
 
 The above stored procedure is similar to that of the one defined under section-4 of the article except,
 
- - The name of the procedure is `_purge_data_by_status_` and accepts an input through parameter named `_in_status_` of type varchar.
- - The input parameter is used in the SQL statement which deletes the data from employees table. Prefix the input parameter with colon (**:in\_status**) to use in a SQL statement.
+ - The name of the procedure is `purge_data_by_status` and accepts an input through parameter named `in_status` of type varchar.
+ - The input parameter is used in the SQL statement which deletes the data from employees table. Prefix the input parameter with colon (**:in_status**) to use in a SQL statement.
  - The same input parameter is also used in the string value assigned to message variable indicating records with which status are deleted.
 
 The above stored procedure can be simplified by eliminating the DECLARE section as shown below.
@@ -208,13 +208,13 @@ The following is the syntax to CALL command
 CALL <procedure_name> ( [ <arg1> , ... ] )
 ```
 
-The below image shows calling a stored procedure named `_purge_data_` and the output of the stored procedure call.
+The below image shows calling a stored procedure named `purge_data` and the output of the stored procedure call.
 
 ![Call Stored Procedure without any Input Parameters](https://thinketl.com/wp-content/uploads/2023/02/113-1-Call-Stored-Procedure-without-any-Input-Parameters.png)
 
 Call Stored Procedure without any Input Parameters
 
-The below image shows calling a stored procedure named `_purge_data_by_status_` with a string input parameter _‘**INACTIVE**’_ and the output of the stored procedure call.
+The below image shows calling a stored procedure named `purge_data_by_status` with a string input parameter _‘**INACTIVE**’_ and the output of the stored procedure call.
 
 ```sql
 CALL purge_data_by_status('INACTIVE');
