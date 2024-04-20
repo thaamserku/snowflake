@@ -75,14 +75,14 @@ Before we get into understanding how to clone an object in Snowflake, it is wort
 
 Cloning objects in Snowflake is simple and can be achieved using a simple SQL statement as shown below.
 
-```
+```sql
 CREATE <object_type> <object_name>
   CLONE <source_object_name>
 ```
 
 The above one is a simplified version. The complete syntax to clone a Snowflake object is as shown below.
 
-```
+```sql
 CREATE [ OR REPLACE ] { DATABASE | SCHEMA | TABLE | STREAM | STAGE | FILE FORMAT | SEQUENCE | TASK } [ IF NOT EXISTS ] <object_name>
   CLONE <source_object_name>
 ```
@@ -97,7 +97,7 @@ If you accidentally dropped a table or some of the records in a table, they can 
 
 This syntax to clone a table with Time travel as shown below.
 
-```
+```sql
 CREATE [ OR REPLACE ] { DATABASE | SCHEMA | TABLE | STREAM } [ IF NOT EXISTS ] <object_name>
   CLONE <source_object_name>
           [ { AT | BEFORE } ( { TIMESTAMP => <timestamp> | OFFSET => <time_difference> | STATEMENT => <id> } ) ]
@@ -107,7 +107,7 @@ CREATE [ OR REPLACE ] { DATABASE | SCHEMA | TABLE | STREAM } [ IF NOT EXISTS ] <
 
 The below are few examples showing how to clone tables using time-travel in Snowflake
 
-```
+```sql
 CREATE TABLE EMPLOYEE_CLONE CLONE EMPLOYEE
   AT(OFFSET => -60*5);
 
@@ -142,4 +142,3 @@ To summarize everything we have discussed, in short, when a table is cloned in S
     A definitive guide on how to download, install, configure and use Snowflake SnowSQL Command Line tool
     
     [**READ MORE**](https://thinketl.com/snowflake-snowsql-command-line-tool-to-access-snowflake/)
-#capture
