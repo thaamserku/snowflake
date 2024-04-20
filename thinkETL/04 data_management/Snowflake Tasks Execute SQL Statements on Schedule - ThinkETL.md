@@ -5,13 +5,13 @@ source: https://thinketl.com/snowflake-tasks-execute-sql-statements-on-schedule/
 author: ThinkETL
 ---
 
-# Snowflake Tasks: Execute SQL Statements on Schedule - ThinkETL
+# Snowflake Tasks: Execute SQL Statements on Schedule
 
-> ## Excerpt
+
 > A Snowflake Task allows scheduled execution of SQL statements including calling a stored procedure or Procedural logic using Snowflake Scripting.
 
 ---
-## **1\. Introduction**
+## **1. Introduction**
 
 In our previous article we have discussed about [Snowflake Streams](https://thinketl.com/change-data-capture-using-snowflake-streams/) using which we were able to identify the changes made in a RAW table and merge the changes into the target dimension table. But the process of verifying the Stream to see if any changes were done on raw table and merging them into target table is a manual process.
 
@@ -19,7 +19,7 @@ In our previous article we have discussed about [Snowflake Streams](https://thin
 
 In this article let us discuss more about Snowflake Tasks and Task-Trees and how to build them.
 
-## **2\. What is a Snowflake Task?**
+## **2. What is a Snowflake Task?**
 
 **A Snowflake Task allows scheduled execution of SQL statements including calling a stored procedure or Procedural logic using Snowflake Scripting.**
 
@@ -35,7 +35,7 @@ Few key points to be noted before we get into building Snowflake Tasks
 -   The Schedule parameter takes only minutes. It does not support second or hour.
 -   The minimum value of a schedule parameter is 1 minute and the maximum value that can be assigned to schedule parameter is 8 days i.e 11520 minutes.
 
-## **3\. Building a Snowflake Task**
+## **3. Building a Snowflake Task**
 
 Tasks require compute resources to execute SQL code. Either of the following compute models can be chosen for individual tasks:
 
@@ -46,14 +46,14 @@ Tasks require compute resources to execute SQL code. Either of the following com
 
 You can manage the compute resources for individual tasks by specifying an existing virtual warehouse when creating the task. Make sure you choose a right sized warehouse for the SQL actions defined in task.
 
-Below is an example which creates a user-managed task that inserts data into employees table every 5 minutes using **COMPUTE\_WH** warehouse.
+Below is an example which creates a user-managed task that inserts data into employees table every 5 minutes using **COMPUTE_WH** warehouse.
 
-```
-CREATE TASK mytask
+```sql
+CREATE TASK MYTASK
   WAREHOUSE = COMPUTE_WH  
   SCHEDULE = '5 MINUTE'
 AS
-INSERT INTO employees VALUES( EMPLOYEE_SEQUENCE.NEXTVAL,'F_NAME','L_NAME','101') 
+INSERT INTO EMPLOYEES VALUES( EMPLOYEE_SEQUENCE.NEXTVAL,'F_NAME','L_NAME','101') 
 ;
 ```
 
@@ -67,18 +67,18 @@ The Serverless compute model for tasks enables you to rely on compute resources 
 
 Below is the same example which creates a task using serverless compute model.
 
-```
-CREATE TASK mytask_serverless   
+```sql
+CREATE TASK MYTASK_SERVERLESS   
   USER_TASK_MANAGED_INITIAL_WAREHOUSE_SIZE = 'XSMALL'   
   SCHEDULE = '5 MINUTE' 
 AS 
-INSERT INTO employees VALUES( EMPLOYEE_SEQUENCE.NEXTVAL,'F_NAME','L_NAME','101')
+INSERT INTO EMPLOYEES VALUES( EMPLOYEE_SEQUENCE.NEXTVAL,'F_NAME','L_NAME','101')
 ;
 ```
 
-To specify the initial warehouse size for the task, set the **USER\_TASK\_MANAGED\_INITIAL\_WAREHOUSE\_SIZE** parameter. Though the tasks starts with a XSMALL warehouse, if it sees a needs for more capacity, it will go for a bigger warehouse.
+To specify the initial warehouse size for the task, set the **USER_TASK_MANAGED_INITIAL_WAREHOUSE_SIZE** parameter. Though the tasks starts with a XSMALL warehouse, if it sees a needs for more capacity, it will go for a bigger warehouse.
 
-## **4\. Scheduling a Snowflake Task**
+## **4. Scheduling a Snowflake Task**
 
 Snowflake Tasks are not event based, instead a task runs on a schedule. The Snowflake task engine has a **CRON** and **NONCRON** variant scheduling mechanisms. You must be familiar with CRON variant’s syntax if you are a Linux user.
 
@@ -106,16 +106,16 @@ Each asterisk denotes a specific time value as shown below.
 
 Below is an example of Snowflake task in CRON notation which runs every Sunday at 10 AM UTC.
 
-```
-CREATE OR REPLACE TASK my_crontask
+```sql
+CREATE OR REPLACE TASK MY_CRONTASK
     WAREHOUSE = COMPUTE_WH
     SCHEDULE = 'USING CRON * 10 * * SUN UTC'
     AS
-INSERT INTO employees VALUES( EMPLOYEE_SEQUENCE.NEXTVAL,'F_NAME','L_NAME','101')
+INSERT INTO EMPLOYEES VALUES( EMPLOYEE_SEQUENCE.NEXTVAL,'F_NAME','L_NAME','101')
 ;
 ```
 
-## **5\. Turning the Snowflake Tasks on and off**
+## **5. Turning the Snowflake Tasks on and off**
 
 Once task is created, its status can be verified in Snowflake using SHOW TASKS.
 
@@ -123,23 +123,23 @@ Once task is created, its status can be verified in Snowflake using SHOW TASKS.
 
 The initial status of the task will be “suspened” when created. To turn on a Snowflake task, issue below alter task command.
 
-```
-ALTER TASK mytask RESUME;
+```sql
+ALTER TASK MYTASK RESUME;
 ```
 
 ![SHOW TASKS after resuming the task](https://thinketl.com/wp-content/uploads/2022/06/80-3-show-tasks-after-alter-task.png)
 
 To turn off a Snowflake task, issue below alter task command.
 
-```
-ALTER TASK mytask SUSPEND;
+```sql
+ALTER TASK MYTASK SUSPEND;
 ```
 
-## **6\. How to verify the task history of a Snowflake Task?**
+## **6. How to verify the task history of a Snowflake Task?**
 
 The status of every task run can be verified using the below query which provides the entire task history.
 
-```
+```sql
 --CHECK TASK HISTORY
 SELECT * FROM TABLE(INFORMATION_SCHEMA.TASK_HISTORY()) WHERE NAME = 'MYTASK';
 ```
@@ -148,9 +148,9 @@ SELECT * FROM TABLE(INFORMATION_SCHEMA.TASK_HISTORY()) WHERE NAME = 'MYTASK';
 
 Check Task History
 
-If there is a failure you can find the error\_code and error\_message associated with the failure.
+If there is a failure you can find the error_code and error_message associated with the failure.
 
-## **7\. What is Snowflake Task Tree?**
+## **7. What is Snowflake Task Tree?**
 
 Consider a scenario where you wanted to trigger another task immediately after an initial task completes and so on. This is supported in Snowflake by creating a B-Tree-like task structure which is referred as Task Tree.
 
@@ -158,14 +158,14 @@ Consider a scenario where you wanted to trigger another task immediately after a
 
 You can have only 1 root task and all child tasks are linked to the root task based on task dependency (i.e. before or after). Root tasks will have scheduler defined, and all child tasks follow sequential execution as per their dependency defined. The child tasks runs only after all specified predecessor task have successfully completed their own run.
 
-The following example shows a task **mytask** set as a dependency for the task **mytask\_2** to trigger. The task **mytask\_2** which is a child task has no schedule of its own.
+The following example shows a task **mytask** set as a dependency for the task **mytask_2** to trigger. The task **mytask_2** which is a child task has no schedule of its own.
 
-```
-CREATE OR REPLACE TASK mytask_2
+```sql
+CREATE OR REPLACE TASK MYTASK_2
   WAREHOUSE = COMPUTE_WH
-  AFTER mytask
+  AFTER MYTASK
 AS
-INSERT INTO mytable(ts) VALUES(CURRENT_TIMESTAMP)
+INSERT INTO MYTABLE(TS) VALUES(CURRENT_TIMESTAMP)
 ;
 ```
 
@@ -173,9 +173,9 @@ INSERT INTO mytable(ts) VALUES(CURRENT_TIMESTAMP)
 
 We can verify the task dependence by using the following query
 
-```
+```sql
 --CHECK DEPENTANT TASKS
-SELECT * FROM TABLE(INFORMATION_SCHEMA.TASK_DEPENDENTS(TASK_NAME => 'mytask', RECURSIVE => FALSE));
+SELECT * FROM TABLE(INFORMATION_SCHEMA.TASK_DEPENDENTS(TASK_NAME => 'MYTASK', RECURSIVE => FALSE));
 ```
 
 ![Check Dependent Tasks](https://thinketl.com/wp-content/uploads/2022/06/80-4-task-dependency.png)
@@ -188,27 +188,27 @@ Consider a scenario where taskA is a root task and taskB and taskC are its child
 
 Directed Acyclic Graph (DAG) of tasks is currently available under public preview as of June 2022 where it is possible to set these kind of dependencies.
 
-## **8\. Building a Snowflake Task that tracks INSERT operations from a Stream**
+## **8. Building a Snowflake Task that tracks INSERT operations from a Stream**
 
 Tasks can be combined with table streams for continuous ELT workflows to process recently changed table rows.
 
-The below task tracks data for INSERT operations from a stream and inserts changes into a table every 5 minutes. The task polls the stream using the SYSTEM$STREAM\_HAS\_DATA function to determine whether change data exists and, if the result is FALSE, skips the current run.
+The below task tracks data for INSERT operations from a stream and inserts changes into a table every 5 minutes. The task polls the stream using the SYSTEM$STREAM_HAS_DATA function to determine whether change data exists and, if the result is FALSE, skips the current run.
 
-```
-CREATE OR REPLACE TASK my_streamtask
+```sql
+CREATE OR REPLACE TASK MY_STREAMTASK
   WAREHOUSE = COMPUTE_WH
-  SCHEDULE = '5 minute'
+  SCHEDULE = '5 MINUTE'
 WHEN
-  SYSTEM$STREAM_HAS_DATA('my_stream')
+  SYSTEM$STREAM_HAS_DATA('MY_STREAM')
 AS
-  INSERT INTO EMPLOYEE(id,name,salary) SELECT id,name,salary FROM my_stream WHERE metadata$action = 'INSERT' AND metadata$isupdate = 'FALSE';
+  INSERT INTO EMPLOYEE(ID,NAME,SALARY) SELECT ID,NAME,SALARY FROM MY_STREAM WHERE METADATA$ACTION = 'INSERT' AND METADATA$ISUPDATE = 'FALSE';
 ```
 
-## **9\. Building a Snowflake Task that calls a Stored Procedure**
+## **9. Building a Snowflake Task that calls a Stored Procedure**
 
-The following query creates a task named mytask\_sp that calls a stored procedure MY\_STORED\_PROC every hour.
+The following query creates a task named mytask_sp that calls a stored procedure MY_STORED_PROC every hour.
 
-```
+```sql
 CREATE TASK mytask_sp
   WAREHOUSE = MYWH
   SCHEDULE = '60 MINUTE'
@@ -217,31 +217,9 @@ AS
 ;
 ```
 
-## **10\. Manually executing a Snowflake Task**
+## **10. Manually executing a Snowflake Task**
 
 The EXECUTE TASK command manually triggers a single run of a scheduled task independent of the schedule defined for the task. This SQL command is useful for testing new or modified tasks before you enable them to execute SQL code in production.
 
 In summary tasks are very handy in Snowflake, they can be combined with [Streams](https://thinketl.com/change-data-capture-using-snowflake-streams/), [Snowpipe](https://thinketl.com/introduction-to-snowpipe-on-azure/) and other techniques to make them extremely powerful.
 
-**Subscribe to our Newsletter !!**
-
-**Related Articles**:
-
--   [![Introduction to Snowpipe on Azure](https://thinketl.com/wp-content/uploads/2022/05/Snowpipe.png)](https://thinketl.com/introduction-to-snowpipe-on-azure/)
-    
-    A step by step guide on automating continuous data loading into Snowflake through Snowpipe on Microsoft Azure.
-    
-    [**READ MORE**](https://thinketl.com/introduction-to-snowpipe-on-azure/)
-    
--   [![Types of Views in Snowflake](https://thinketl.com/wp-content/uploads/2022/05/TYPES-OF-SNOWFLAKE-VIEWS.png)](https://thinketl.com/types-of-views-in-snowflake/)
-    
-    There are three different types of views in Snowflake – Non-Materialized, Materialized and Secure Views.
-    
-    [**READ MORE**](https://thinketl.com/types-of-views-in-snowflake/)
-    
--   [![Snowflake Secure Data Sharing](https://thinketl.com/wp-content/uploads/2022/06/SNOWFLAKE-SECURE-DATA-SHARING.png)](https://thinketl.com/snowflake-secure-data-sharing/)
-    
-    Secure Data Sharing in Snowflake enables account-to-account sharing of selected database objects in your account with other.
-    
-    [**READ MORE**](https://thinketl.com/snowflake-secure-data-sharing/)
-#capture

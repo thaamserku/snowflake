@@ -5,16 +5,16 @@ source: https://thinketl.com/snowflake-virtual-warehouses/
 author: ThinkETL
 ---
 
-# Snowflake Virtual Warehouses - ThinkETL
+# Snowflake Virtual Warehouses
 
-> ## Excerpt
+
 > A Virtual warehouse is a cluster of compute resources which provides required resources such as CPU, memory, and temporary storage in Snowflake.
 
----
+
   
 In our earlier article where we discussed about [Snowflake’s Architecture](https://thinketl.com/snowflake-architecture/), we have talked about the compute layer which is the ‘Muscle’ of the system where queries are executed. Before any query is executed, compute machines needs to be provisioned in Snowflake and they are called Virtual Warehouses. Creating your Virtual Warehouses will be one of the first steps you take while configuring your Snowflake system.
 
-## **1\. What is a Snowflake Virtual Warehouse?**
+## **1. What is a Snowflake Virtual Warehouse?**
 
 **A Virtual Warehouse is a cluster of compute resources in Snowflake. A warehouse provides the required resources, such as CPU, memory, and temporary storage, to perform various operations in Snowflake like executing SQL statements, performing data loading and unloading operations.**
 
@@ -22,7 +22,7 @@ The Virtual Warehouses can be started and stopped at any time. They can also be 
 
 One of Snowflake’s greatest benefits is that, in order to create a Virtual Warehouse, you simply give a name and specify the size of the compute power (larger the size, more the compute power), and Snowflake handles all the provisioning and configuration of underlying compute resources (ex. It is EC2 instance in case of AWS, Azure virtual machines in case of Azure).
 
-## **2\. Steps to create a Snowflake Virtual Warehouse**
+## **2. Steps to create a Snowflake Virtual Warehouse**
 
 You can create a Snowflake virtual warehouse through the web interface or using SQL.
 
@@ -54,7 +54,7 @@ SQL to create a Virtual Warehouse
 
 Let’s go through the remaining options one by one in the following sections of the post so that you have a complete understanding of provisioning a virtual warehouse.
 
-## **3\. Virtual Warehouse Size and Credit Usage/Billing**
+## **3. Virtual Warehouse Size and Credit Usage/Billing**
 
 The Virtual Warehouse Size specifies the amount of compute resources available per cluster in a warehouse. They are available in a range of T-shirt sizes, from extra small to 6XL, with each size representing an increase in the amount of hardware resources available for you to use.
 
@@ -66,7 +66,7 @@ The below table shows the credits consumed per hour and second for different war
 
 > Note that Snowflake utilizes per-second billing( **charges for first 60 seconds minimum** each time the warehouse starts) so warehouses are billed only for the credits they actually consume.
 
-## **4\. Multi-cluster Warehouses**
+## **4. Multi-cluster Warehouses**
 
 **Multi-cluster warehouses enable you to automatically scale out compute resources to manage your concurrent users/queries needs as they change, such as during peak and off hours. Multi-cluster warehouses are an Enterprise Edition feature.**
 
@@ -90,7 +90,7 @@ Observe the difference in number of credits consumed by a single cluster Medium 
 
 > _Note that Multi-cluster warehouses are not as beneficial for improving the performance of slow-running queries or data loading. For these types of operations, **Scaling up by resizing** a warehouse provides more benefits._
 
-## **5\. Maximized vs Auto-Scale Modes**
+## **5. Maximized vs Auto-Scale Modes**
 
 You can choose to run a Multi-cluster warehouse in either of the following modes.
 
@@ -110,7 +110,7 @@ This mode is enabled by **specifying different values for maximum and minimum nu
 -   As the number of concurrent user sessions/queries for the warehouse increases, the queries start to queue due to insufficient resources. Snowflake then automatically starts additional clusters, up to the maximum number defined for the warehouse.
 -   Similarly, as the load on the warehouse decreases, Snowflake automatically shuts down clusters to reduce the number of running clusters and, correspondingly, the number of credits used by the warehouse.
 
-## **6\. Scaling Policy: Standard vs Economy**
+## **6. Scaling Policy: Standard vs Economy**
 
 Scaling Policy helps control the credits consumed by a multi-cluster warehouse running in Auto-scale mode (i.e. the minimum and maximum number of clusters are set to different value). It helps in determining when to start or shut down a cluster.
 
@@ -131,7 +131,7 @@ Snowflake supports the following scaling policies.
 -   It conserves credits by favoring keeping running clusters fully-loaded rather than starting additional clusters.
 -   A new cluster is started only if the system estimates there’s enough query load to keep the cluster busy for at least 6 minutes.
 
-## **7\. Auto Suspend and Auto Resume Warehouses**
+## **7. Auto Suspend and Auto Resume Warehouses**
 
 A warehouse can be set to automatically Suspend or Resume, based on activity
 
@@ -155,11 +155,11 @@ You can resume, suspend warehouses from web interface as shown below. You can al
 
 The same can be done using SQL as shown below.
 
-```
-alter warehouse my_wh resume;alter warehouse my_wh suspend;
+```sql
+ALTER WAREHOUSE MY_WH RESUME;ALTER WAREHOUSE MY_WH SUSPEND;
 ```
 
-## **8\. Conclusion**
+## **8. Conclusion**
 
 To find the combinations that best suit your unique query demands and workload, experiment with various query types and warehouse sizes. You can build multiple warehouses with different sizes and use them according to the query performance needs. As Snowflake utilizes per-second billing, you can run larger warehouses (Large, X-Large, 2X-Large, etc.) and simply suspend them when not in use.
 
@@ -167,25 +167,3 @@ Resizing a running warehouse does not impact queries that are already being proc
 
 It is recommended to enable Auto-suspend and Auto-resume. If you choose to disable auto-suspend, please carefully consider the costs associated with running a warehouse continually, even when the warehouse is not processing queries.
 
-**Test your understanding**
-
-**Subscribe to our Newsletter !!**
-
--   [![Introduction to Snowpipe on Azure](https://thinketl.com/wp-content/uploads/2022/05/Snowpipe.png)](https://thinketl.com/introduction-to-snowpipe-on-azure/)
-    
-    A step by step guide on automating continuous data loading into Snowflake through Snowpipe on Microsoft Azure.
-    
-    [**READ MORE**](https://thinketl.com/introduction-to-snowpipe-on-azure/)
-    
--   [![Types of Views in Snowflake](https://thinketl.com/wp-content/uploads/2022/05/TYPES-OF-SNOWFLAKE-VIEWS.png)](https://thinketl.com/types-of-views-in-snowflake/)
-    
-    There are three different types of views in Snowflake – Non-Materialized, Materialized and Secure Views.
-    
-    [**READ MORE**](https://thinketl.com/types-of-views-in-snowflake/)
-    
--   [![Snowflake Secure Data Sharing](https://thinketl.com/wp-content/uploads/2022/06/SNOWFLAKE-SECURE-DATA-SHARING.png)](https://thinketl.com/snowflake-secure-data-sharing/)
-    
-    Secure Data Sharing in Snowflake enables account-to-account sharing of selected database objects in your account with other.
-    
-    [**READ MORE**](https://thinketl.com/snowflake-secure-data-sharing/)
-#capture

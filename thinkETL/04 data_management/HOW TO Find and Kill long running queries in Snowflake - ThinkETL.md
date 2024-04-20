@@ -5,37 +5,37 @@ source: https://thinketl.com/how-to-find-and-kill-long-running-queries-in-snowfl
 author: ThinkETL
 ---
 
-# HOW TO: Find and Kill long running queries in Snowflake? - ThinkETL
+# HOW TO: Find and Kill long running queries in Snowflake? 
 
-> [!Excerpt]
+
 > Learn how to find and kill long running queries in Snowflake using the QUERY_HISTORY table functions available under Information Schema.
 
 
 ## **1. Introduction**
 
-The Snowflake **[INFORMATION\_SCHEMA](https://thinketl.com/snowflake-information-schema/)** consists of a set of system-defined views and **table functions** that provide extensive metadata information about the objects created in your account.
+The Snowflake **[INFORMATION_SCHEMA](https://thinketl.com/snowflake-information-schema/)** consists of a set of system-defined views and **table functions** that provide extensive metadata information about the objects created in your account.
 
 There is a table function that is made available under Snowflake information schema which provides historical information of queries triggered which helps in finding and killing the long running queries.
 
 ## **2. QUERY_HISTORY table function**
 
-The **QUERY\_HISTORY** table function can be used to query Snowflake query history along various dimensions. The functions returns query activity within the last 7 days.
+The **QUERY_HISTORY** table function can be used to query Snowflake query history along various dimensions. The functions returns query activity within the last 7 days.
 
-There is a family of table functions available under QUERY\_HISTORY
+There is a family of table functions available under QUERY_HISTORY
 
--   **QUERY\_HISTORY**: Returns queries within a specified time range.
--   **QUERY\_HISTORY\_BY\_SESSION**:  Returns queries within a specified session and time range.
--   **QUERY\_HISTORY\_BY\_USER**:  Returns queries submitted by a specified user within a specified time range.
--   **QUERY\_HISTORY\_BY\_WAREHOUSE**:  Returns queries executed by a specified warehouse within a specified time range.
+-   **`QUERY_HISTORY`**: Returns queries within a specified time range.
+-   **`QUERY_HISTORY_BY_SESSION`**:  Returns queries within a specified session and time range.
+-   **`QUERY_HISTORY_BY_USER`**:  Returns queries submitted by a specified user within a specified time range.
+-   **`QUERY_HISTORY_BY_WAREHOUSE`**:  Returns queries executed by a specified warehouse within a specified time range.
 
 ## **3. Retrieving query history using QUERY_HISTORY table function**
 
 The below query retrieves up to the last 100 queries run by the current user or run by any user on any warehouse on which the current user has the MONITOR privilege.
 
 ```sql
-select *
-from table(information_schema.query_history())
-order by start_time;
+SELECT *
+FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY())
+ORDER BY START_TIME;
 ```
 
 ## **4. Finding long queries within a time range**
@@ -45,102 +45,102 @@ order by start_time;
 The below query retrieves the long running queries which ran more than 5 minutes in last 1 hour.
 
 ```sql
-select
-    query_id,
-    query_text,
-    user_name,
-    warehouse_name,
-    start_time,
-    end_time,
-    datediff(second, start_time, end_time) as run_time_in_seconds
-from table(information_schema.query_history())
-where datediff(minute, start_time, end_time) > 5
-and start_time > dateadd(hour, -1, current_timestamp())
-order by start_time;
+SELECT
+    QUERY_ID,
+    QUERY_TEXT,
+    USER_NAME,
+    WAREHOUSE_NAME,
+    START_TIME,
+    END_TIME,
+    DATEDIFF(SECOND, START_TIME, END_TIME) AS RUN_TIME_IN_SECONDS
+FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY())
+WHERE DATEDIFF(MINUTE, START_TIME, END_TIME) > 5
+AND START_TIME > DATEADD(HOUR, -1, CURRENT_TIMESTAMP())
+ORDER BY START_TIME;
 ```
 
 ### **4.2. With arguments in table function**
 
-Alternatively the above query can also written by passing arguments (**END\_TIME\_RANGE\_START**, **END\_TIME\_RANGE\_END**)  to the **QUERY\_HISTORY** table function as shown below.
+Alternatively the above query can also written by passing arguments (**`END_TIME_RANGE_START`**, **`END_TIME_RANGE_END`**)  to the **`QUERY_HISTORY`** table function as shown below.
 
 ```sql
-select
-    query_id,
-    query_text,
-    user_name,
-    warehouse_name,
-    start_time,
-    end_time,
-    datediff(second, start_time, end_time) as run_time_in_seconds
-from table(information_schema.query_history(
-    END_TIME_RANGE_START => dateadd(hour,-1,current_timestamp()),
-    END_TIME_RANGE_END => current_timestamp() ))
-where datediff(minute, start_time, end_time) > 5
-order by start_time;
+SELECT
+    QUERY_ID,
+    QUERY_TEXT,
+    USER_NAME,
+    WAREHOUSE_NAME,
+    START_TIME,
+    END_TIME,
+    DATEDIFF(SECOND, START_TIME, END_TIME) AS RUN_TIME_IN_SECONDS
+FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY(
+    END_TIME_RANGE_START => DATEADD(HOUR,-1,CURRENT_TIMESTAMP()),
+    END_TIME_RANGE_END => CURRENT_TIMESTAMP() ))
+WHERE DATEDIFF(MINUTE, START_TIME, END_TIME) > 5
+ORDER BY START_TIME;
 ```
 
-> _The arguments in table function are not mandatory. If END\_TIME\_RANGE\_END is not specified, the function returns all queries, including those that are still running currently._
+> _The arguments in table function are not mandatory. If END_TIME_RANGE_END is not specified, the function returns all queries, including those that are still running currently._
 
 The below query retrieves the queries started in last 5 minutes and still running.
 
 ```sql
-select
-    query_id,
-    query_text,
-    user_name,
-    warehouse_name,
-    start_time,
-    datediff(second, start_time, current_timestamp) as run_time_in_seconds
-from table(information_schema.query_history(END_TIME_RANGE_START => dateadd(minute, -5, current_timestamp)))
-where execution_status='RUNNING'
-order by start_time;
+SELECT
+    QUERY_ID,
+    QUERY_TEXT,
+    USER_NAME,
+    WAREHOUSE_NAME,
+    START_TIME,
+    DATEDIFF(SECOND, START_TIME, CURRENT_TIMESTAMP) AS RUN_TIME_IN_SECONDS
+FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY(END_TIME_RANGE_START => DATEADD(MINUTE, -5, CURRENT_TIMESTAMP)))
+WHERE EXECUTION_STATUS='RUNNING'
+ORDER BY START_TIME;
 ```
 
 ## **5. Finding long running queries by User**
 
-The below query retrieves the queries started in last 5 minutes and still running by user named “TONY”. The user name is passed through the argument **USER\_NAME** to the **QUERY\_HISTORY\_BY\_USER** table function.
+The below query retrieves the queries started in last 5 minutes and still running by user named “TONY”. The user name is passed through the argument **USER_NAME** to the **`QUERY_HISTORY_BY_USER`** table function.
 
 ```sql
-select
-    query_id,
-    query_text,
-    user_name,
-    warehouse_name,
-    start_time,
-    datediff(second, start_time, current_timestamp) as run_time_in_seconds
-from table(information_schema.query_history_by_user(USER_NAME => 'TONY'))
-where execution_status='RUNNING'
-order by start_time;
+SELECT
+    QUERY_ID,
+    QUERY_TEXT,
+    USER_NAME,
+    WAREHOUSE_NAME,
+    START_TIME,
+    DATEDIFF(SECOND, START_TIME, CURRENT_TIMESTAMP) AS RUN_TIME_IN_SECONDS
+FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY_BY_USER(USER_NAME => 'TONY'))
+WHERE EXECUTION_STATUS='RUNNING'
+ORDER BY START_TIME;
 ```
 
-> _Arguments used in QUERY\_HISTORY table function can be used in all of its family of table functions. Refer the example below._
+> _Arguments used in QUERY_HISTORY table function can be used in all of its family of table functions. Refer the example below._
 
 ## **6. Finding long running queries by Warehouse**
 
-The below query retrieves the queries which are triggered in last 1 hour and still running on warehouse named “’COMPUTE\_WH”. The warehouse name is passed through the argument **WAREHOUSE\_NAME** to the **QUERY\_HISTORY\_BY\_ WAREHOUSE** table function.
+The below query retrieves the queries which are triggered in last 1 hour and still running on warehouse named “’COMPUTE_WH”. The warehouse name is passed through the argument **WAREHOUSE_NAME** to the **`QUERY_HISTORY_BY_ WAREHOUSE`** table function.
 
 ```sql
-select
-    query_id,
-    query_text,
-    user_name,
-    warehouse_name,
-    start_time,
-    datediff(second, start_time, current_timestamp) as run_time_in_seconds
-from table(information_schema.query_history_by_warehouse(
-    END_TIME_RANGE_START => dateadd(hour,-1,current_timestamp()),
-    END_TIME_RANGE_END => current_timestamp(),
+SELECT
+    QUERY_ID,
+    QUERY_TEXT,
+    USER_NAME,
+    WAREHOUSE_NAME,
+    START_TIME,
+    DATEDIFF(SECOND, START_TIME, CURRENT_TIMESTAMP) AS RUN_TIME_IN_SECONDS
+FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY_BY_WAREHOUSE(
+    END_TIME_RANGE_START => DATEADD(HOUR,-1,CURRENT_TIMESTAMP()),
+    END_TIME_RANGE_END => CURRENT_TIMESTAMP(),
     WAREHOUSE_NAME => 'COMPUTE_WH'))
-where execution_status='RUNNING'
-order by start_time;
+WHERE EXECUTION_STATUS='RUNNING'
+ORDER BY START_TIME;
 ```
 
-## **7. Killing a long running query in Snowflake using SYSTEM$CANCEL_QUERY**
+## **7. Killing a long running query in Snowflake using `SYSTEM$CANCEL_QUERY`**
 
-SYSTEM$CANCEL\_QUERY kills/cancels the specified query (or statement) if it is currently active/running. The id of the query can be extracted by using the queries shared above.
+**`SYSTEM$CANCEL_QUERY`** kills/cancels the specified query (or statement) if it is currently active/running. The id of the query can be extracted by using the queries shared above.
 
 ```sql
-select system$cancel_query('<query_id>');
+SELECT SYSTEM$CANCEL_QUERY('<QUERY_ID>');
 ```
 
 A user can cancel their own running SQL queries. Cancelling queries executed by another user requires a role with one of the following privileges.

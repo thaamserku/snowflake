@@ -5,12 +5,10 @@ source: https://thinketl.com/snowflake-zero-copy-cloning/
 author: ThinkETL
 ---
 
-# Snowflake Zero Copy Cloning - ThinkETL
+# Snowflake Zero Copy Cloning 
 
-> ## Excerpt
 > Snowflake’s Zero Copy Cloning feature is a quick and easy way to create copies of database objects without incurring any additional costs.
 
----
 ## **Introduction**
 
 It is often periodically required to replicate real time data from production environment into your dev or staging environments to have accurate unit test results for the latest changes planned in the project. One of the biggest difficulties in traditional databases is replicating your database objects from one environment to another. It involves proper planning, additional storage costs and long waiting times for the entire process to complete.
@@ -19,9 +17,9 @@ Snowflake simplifies the process of replicating your data without incurring any 
 
 ## **What is Zero Copy Cloning in Snowflake?**
 
-**Snowflake’s Zero Copy Cloning is a feature which provides a quick and easy way to create a copy of any table, schema, or an entire database without incurring any additional costs as the derived copy shares the underlying storage with the original object.** 
+> **Snowflake’s Zero Copy Cloning is a feature which provides a quick and easy way to create a copy of any table, schema, or an entire database without incurring any additional costs as the derived copy shares the underlying storage with the original object.** 
 
-The most powerful feature of Zero Copy Cloning is that the cloned and original objects are independent from each other i.e., any changes done on either of the objects do not impact others. Until you make any changes, the cloned object shares the same storage as original. This can be quite useful for quickly producing backups that don’t cost anything extra until the copied object is changed.
+The most powerful feature of Zero Copy Cloning is that _the cloned and original objects are independent from each other_ i.e., any changes done on either of the objects do not impact others. Until you make any changes, the cloned object shares the same storage as original. This can be quite useful for quickly producing backups that don’t cost anything extra until the copied object is changed.
 
 > **However, any changes done on cloned snapshot creates additional storage components which results in additional costs.**
 
@@ -75,16 +73,16 @@ Before we get into understanding how to clone an object in Snowflake, it is wort
 
 Cloning objects in Snowflake is simple and can be achieved using a simple SQL statement as shown below.
 
-```
-CREATE <object_type> <object_name>
-  CLONE <source_object_name>
+```sql
+CREATE <OBJECT_TYPE> <OBJECT_NAME>
+  CLONE <SOURCE_OBJECT_NAME>
 ```
 
 The above one is a simplified version. The complete syntax to clone a Snowflake object is as shown below.
 
-```
-CREATE [ OR REPLACE ] { DATABASE | SCHEMA | TABLE | STREAM | STAGE | FILE FORMAT | SEQUENCE | TASK } [ IF NOT EXISTS ] <object_name>
-  CLONE <source_object_name>
+```sql
+CREATE [ OR REPLACE ] { DATABASE | SCHEMA | TABLE | STREAM | STAGE | FILE FORMAT | SEQUENCE | TASK } [ IF NOT EXISTS ] <OBJECT_NAME>
+  CLONE <SOURCE_OBJECT_NAME>
 ```
 
 The above statements will create a new object cloned from a source object. Though the metadata of the cloned object and the underlying data it is holding is same as the source object, both objects have their own life cycle and are independent from each other.
@@ -97,17 +95,17 @@ If you accidentally dropped a table or some of the records in a table, they can 
 
 This syntax to clone a table with Time travel as shown below.
 
-```
-CREATE [ OR REPLACE ] { DATABASE | SCHEMA | TABLE | STREAM } [ IF NOT EXISTS ] <object_name>
-  CLONE <source_object_name>
-          [ { AT | BEFORE } ( { TIMESTAMP => <timestamp> | OFFSET => <time_difference> | STATEMENT => <id> } ) ]
+```sql
+CREATE [ OR REPLACE ] { DATABASE | SCHEMA | TABLE | STREAM } [ IF NOT EXISTS ] <OBJECT_NAME>
+  CLONE <SOURCE_OBJECT_NAME>
+          [ { AT | BEFORE } ( { TIMESTAMP => <TIMESTAMP> | OFFSET => <TIME_DIFFERENCE> | STATEMENT => <ID> } ) ]
 ```
 
 > **This enables you to clone a table as it was at a specific period of time or as it was a few minutes/hours ago.**
 
 The below are few examples showing how to clone tables using time-travel in Snowflake
 
-```
+```sql
 CREATE TABLE EMPLOYEE_CLONE CLONE EMPLOYEE
   AT(OFFSET => -60*5);
 
@@ -123,23 +121,3 @@ That is all about Snowflake Zero Copy Cloning. It is a one of the great Snowflak
 
 To summarize everything we have discussed, in short, when a table is cloned in Snowflake, the clone utilizes no additional data storage because it shares all the existing micro-partitions of the original table at the time it was cloned. However, rows can then be added, deleted, or updated in the clone independently from the original table. Each change to the clone results in new micro-partitions that are owned exclusively by the clone and are protected through CDP.
 
-**Related Articles:**
-
--   [![Types of Snowflake Tables](https://thinketl.com/wp-content/uploads/2022/02/Snowflake-Table-Types.png)](https://thinketl.com/types-of-snowflake-tables/)
-    
-    Snowflake supports three types of tables namely Permanent, Temporary and Transient tables.
-    
-    [**READ MORE**](https://thinketl.com/types-of-snowflake-tables/)
-    
--   [![Overview of Snowflake Time Travel](https://thinketl.com/wp-content/uploads/2022/03/Snowflake-Time-Travel.png)](https://thinketl.com/overview-of-snowflake-time-travel/)
-    
-    Snowflake Time Travel enables accessing historical data that has been changed or deleted at any point within a defined period.
-    
-    [**READ MORE**](https://thinketl.com/overview-of-snowflake-time-travel/)
-    
--   [![Snowflake SnowSQL: Command Line Tool to access Snowflake](https://thinketl.com/wp-content/uploads/2022/03/SnowSQL.png)](https://thinketl.com/snowflake-snowsql-command-line-tool-to-access-snowflake/)
-    
-    A definitive guide on how to download, install, configure and use Snowflake SnowSQL Command Line tool
-    
-    [**READ MORE**](https://thinketl.com/snowflake-snowsql-command-line-tool-to-access-snowflake/)
-#capture

@@ -5,13 +5,13 @@ source: https://thinketl.com/snowflake-resource-monitors/
 author: ThinkETL
 ---
 
-# Snowflake Resource Monitors - ThinkETL
+# Snowflake Resource Monitors
 
-> ## Excerpt
+
 > Snowflake Resource Monitors assist in cost management and prevent unforeseen credit usage caused by operating warehouses.
 
 ---
-## **1\. Introduction**
+## **1. Introduction**
 
 In the Cloud computing era with pay-as-you go resources it is necessary to have a billing alerts set to get notified when there are unexpected spend increases. This is an extremely useful tool to keep a close watch on your resource usage and stay on-budget.
 
@@ -23,7 +23,7 @@ Snowflake provides one such feature to track your resource usage and control you
 
 However, Account Administrators can choose to enable users with other roles to view and modify resource monitors using SQL.
 
-## **3\. Creating Resource Monitors from WebUI**
+## **3. Creating Resource Monitors from WebUI**
 
 To create Resource monitors in Snowflake, follow below steps.
 
@@ -104,9 +104,9 @@ You can define certain defined actions when the credit quota is reaches a certai
 
 > _A Resource Monitor must have at least one action defined. If no actions have been defined, nothing happens when the used credits reach the threshold._
 
-4\. Click **Create** to create the Resource Monitor.
+4. Click **Create** to create the Resource Monitor.
 
-The below image shows the Resource Monitor RM\_DEMO with Credit Quota set to 100 monitoring at the Warehouse level with two warehouses configured with default schedule. 
+The below image shows the Resource Monitor RM_DEMO with Credit Quota set to 100 monitoring at the Warehouse level with two warehouses configured with default schedule. 
 
 -   Suspend and Notify action is set to trigger at 90% of credit usage.
 -   Suspend Immediately and Notify action is set to trigger at 95% of credit usage.
@@ -116,13 +116,13 @@ The below image shows the Resource Monitor RM\_DEMO with Credit Quota set to 100
 
 Creating Resource Monitor
 
-## **4\. Creating Resource Monitors using SQL**
+## **4. Creating Resource Monitors using SQL**
 
 Resource Monitors can also be created using CREATE RESOURCE MONITOR command.
 
 The below image shows an example of resource monitor with default schedule.
 
-```
+```sql
 CREATE RESOURCE MONITOR "RM_DEMO" WITH CREDIT_QUOTA = 100
  TRIGGERS
  ON 90 PERCENT DO SUSPEND
@@ -133,7 +133,7 @@ CREATE RESOURCE MONITOR "RM_DEMO" WITH CREDIT_QUOTA = 100
 
 The below image shows an example of resource monitor with custom schedule.
 
-```
+```sql
 CREATE RESOURCE MONITOR "RM_DEMO" WITH CREDIT_QUOTA = 100,
 frequency = 'MONTHLY', start_timestamp = '2022-10-01 00:00 IST', end_timestamp = null
  TRIGGERS
@@ -143,32 +143,32 @@ frequency = 'MONTHLY', start_timestamp = '2022-10-01 00:00 IST', end_timestamp =
  ON 80 PERCENT DO NOTIFY;
 ```
 
-## **5\. Assigning Warehouses to the Resource Monitor**
+## **5. Assigning Warehouses to the Resource Monitor**
 
 Once the resource monitor is created, warehouses can be assigned to it as shown below.
 
-```
+```sql
 ALTER WAREHOUSE "COMPUTE_WH" SET RESOURCE_MONITOR = "RM_DEMO";
 ALTER WAREHOUSE "DEMO_WH" SET RESOURCE_MONITOR = "RM_DEMO";
 ```
 
 A Resource monitor can be set at the Account level as shown below.
 
-```
+```sql
 ALTER ACCOUNT SET RESOURCE_MONITOR = RM_DEMO;
 ```
 
-## **6\. Resource Monitor Notification Alerts for Administrators**
+## **6. Resource Monitor Notification Alerts for Administrators**
 
 Notifications can be received by account administrators through the **web interface** and/or **email**. By default, notifications are not enabled. It must be enabled from classic web interface.
 
 Follow below steps to enable notifications.
 
-1\. Login to Snowflake and switch the role to **Account Admin**.
+1. Login to Snowflake and switch the role to **Account Admin**.
 
-2\. In the drop-down menu at the top right corner, navigate to **Preferences** > **Notifications**.
+2. In the drop-down menu at the top right corner, navigate to **Preferences** > **Notifications**.
 
-3\. Select the Notification Preference as **All**.
+3. Select the Notification Preference as **All**.
 
 ![Enabling Notification Preferences](https://thinketl.com/wp-content/uploads/2022/10/96-3-Resource-Monitors-Notification-Preferences.png)
 
@@ -176,11 +176,11 @@ Enabling Notification Preferences
 
 > _This allows all the users with Account Admin Role to receive the email alerts._
 
-## **7\. Resource Monitor Notification Alerts for Non-Administrators**
+## **7. Resource Monitor Notification Alerts for Non-Administrators**
 
 Email Notifications for Non-Admin users cannot be enabled directly from Web interface. It can only enabled through SQL statement as shown below.
 
-```
+```sql
 CREATE RESOURCE MONITOR "RM_USER_ALERT" WITH CREDIT_QUOTA = 100
  NOTIFY_USERS = ('SFUSER04')
  TRIGGERS
@@ -198,9 +198,9 @@ To view the list of users who were given access to email alerts of resource moni
 
 Listing users with access to email alerts of Resource Monitor
 
-The users with Account Admin access by default have access to email alerts and they are not displayed under **notify\_users**.
+The users with Account Admin access by default have access to email alerts and they are not displayed under **notify_users**.
 
-## **8\. Assigning Warehouses to multiple Resource Monitors**
+## **8. Assigning Warehouses to multiple Resource Monitors**
 
 When you try to assign a Warehouse which already been assigned to a resource monitor to a new resource monitor, the warehouse gets assigned to the new resource monitor and gets unassigned from previous resource monitor and credit usage resets to zero.
 
@@ -208,7 +208,7 @@ When you try to assign a Warehouse which already been assigned to a resource mon
 
 The older resource monitor if not assigned to any other warehouse remains dormant and do not monitor anything.
 
-## **9\. Summary**
+## **9. Summary**
 
 A Resource Monitor can be used to monitor credit usage by user-managed virtual warehouses and virtual warehouses used by cloud services. However it can only suspend user-managed warehouses based on credit usage thresholds.
 
@@ -216,25 +216,3 @@ A Resource Monitor can be used to monitor credit usage by user-managed virtual w
 -   By default, notifications are not enabled. It must be enabled from classic Web UI for Administrators.
 -   Reassigning a warehouse to a new resource monitor get it unassigned from older resource monitor.
 
-**Subscribe to our Newsletter !!**
-
-**Related Articles:**
-
--   [![Snowflake Micro-Partitions & Data Clustering](https://thinketl.com/wp-content/uploads/2022/06/Snowflake-Micro-partitions-and-Data-Clustering.png)](https://thinketl.com/snowflake-micro-partitions-and-data-clustering/)
-    
-    Learn about Snowflake Micro-partitioning method and how the storage can be organized using Data Clustering in Snowflake.
-    
-    [**READ MORE**](https://thinketl.com/snowflake-micro-partitions-and-data-clustering/)
-    
--   [![Snowflake Virtual Warehouses](https://thinketl.com/wp-content/uploads/2022/07/Snowflake-Warehouses.png)](https://thinketl.com/snowflake-virtual-warehouses/)
-    
-    A Virtual warehouse is a cluster of compute resources which provides required resources such as CPU, memory, and temporary storage in Snowflake.
-    
-    [**READ MORE**](https://thinketl.com/snowflake-virtual-warehouses/)
-    
--   [![Overview of Snowflake Role Based Access Control](https://thinketl.com/wp-content/uploads/2022/07/SNOWFLAKE-ROLE-BASED-ACCESS-CONTROL-1.png)](https://thinketl.com/overview-of-snowflake-role-based-access-control/)
-    
-    Learn various system define roles in Snowflake, their purpose and how you can create custom roles and Role Hierarchy.
-    
-    [**READ MORE**](https://thinketl.com/overview-of-snowflake-role-based-access-control/)
-#capture

@@ -7,10 +7,10 @@ author: ThinkETL
 
 # HOW TO: Remove Duplicates in Snowflake?
 
-> [!Excerpt]
+
 > Learn different ways to remove duplicate records from a Snowflake table using SWAP WITH and INSERT OVERWRITE commands.
 
----
+
 ## **Introduction**
 
 There are several ways in which we can remove duplicates from a Snowflake table. Consider below sample Employee data for the demonstration purpose.

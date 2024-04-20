@@ -7,7 +7,7 @@ author: ThinkETL
 
 # Overview of Snowflake Time Travel
 
-> [!Excerpt]
+
 > Snowflake Time Travel enables accessing historical data that has been changed or deleted at any point within a defined period.
 
 Consider a scenario where instead of dropping a backup table you have accidentally dropped the actual table (or) instead of updating a set of records, you accidentally updated all the records present in the table (because you didn’t use the _Where_ clause in your update statement).
@@ -76,7 +76,7 @@ Employee table
 The employee ‘Michael’ has left the organization and the field IS\_ACTIVE needs to be updated as FALSE. But instead you have updated IS\_ACTIVE as FALSE for all the records present in the table.
 
 ```sql
-UPDATE employee SET IS_ACTIVE=0;
+UPDATE EMPLOYEE SET IS_ACTIVE=0;
 ```
 
 ![Updating IS_ACTIVE in Employee table](https://thinketl.com/wp-content/uploads/2022/03/70-5-Snowflake-Employee-updated.png)
@@ -92,7 +92,7 @@ There are three different ways you could query the historical data using AT | BE
 The following query selects historical data from a table as of 5 minutes ago.
 
 ```sql
-SELECT * FROM employee at(offset => -60*5);
+SELECT * FROM EMPLOYEE AT(OFFSET => -60*5);
 ```
 
 ![Querying historical data using OFFSET](https://thinketl.com/wp-content/uploads/2022/03/70-6-Snowflake-offset-1.png)
@@ -106,7 +106,7 @@ Use **“TIMESTAMP”** to get the data at or before a particular date and time.
 The following query selects historical data from a table as of the date and time represented by the specified timestamp.
 
 ```sql
-SELECT * FROM employee at(timestamp => 'Sun, 06 Mar 2022 13:45:00 +0530'::timestamp_tz);
+SELECT * FROM EMPLOYEE AT(TIMESTAMP => 'SUN, 06 MAR 2022 13:45:00 +0530'::TIMESTAMP_TZ);
 ```
 
 ![Querying historical data using TIMESTAMP](https://thinketl.com/wp-content/uploads/2022/03/70-8-Snowflake-timestamp-1.png)
@@ -120,7 +120,7 @@ Identifier for statement, e.g. query ID
 The following query selects historical data from a table up to, but not including any changes made by the specified statement.
 
 ```sql
-SELECT * FROM employee before(statement => '01a2b7f1-0000-214f-0000-0002ef66a941');
+SELECT * FROM EMPLOYEE BEFORE(STATEMENT => '01A2B7F1-0000-214F-0000-0002EF66A941');
 ```
 
 ![Querying historical data using STATEMENT](https://thinketl.com/wp-content/uploads/2022/03/70-7-Snowflake-statement-4.png)
@@ -136,14 +136,14 @@ We have seen how to query the historical data. In addition, the AT | BEFORE clau
 The following queries show how to clone a table using AT | BEFORE clause in three different ways using OFFSET, TIMESTAMP and STATEMENT.
 
 ```sql
-CREATE TABLE restored_Employee_2 CLONE employee
-    at(offset => -60*5);
+CREATE TABLE RESTORED_EMPLOYEE_2 CLONE EMPLOYEE
+    AT(OFFSET => -60*5);
 
-CREATE TABLE restored_Employee CLONE employee
-  at(timestamp => 'Sun, 06 Mar 2022 13:45:00 +0530'::timestamp_tz);
+CREATE TABLE RESTORED_EMPLOYEE CLONE EMPLOYEE
+  AT(TIMESTAMP => 'SUN, 06 MAR 2022 13:45:00 +0530'::TIMESTAMP_TZ);
 
-CREATE TABLE restored_Employee_3 CLONE employee
-    before(statement => '01a2b7f1-0000-214f-0000-0002ef66a941);
+CREATE TABLE RESTORED_EMPLOYEE_3 CLONE EMPLOYEE
+    BEFORE(STATEMENT => '01A2B7F1-0000-214F-0000-0002EF66A941);
 ```
 
 > To restore the data in the table to a historical state, create a clone using AT | BEFORE clause, drop the actual table and rename the cloned table to the actual table name.
@@ -165,11 +165,11 @@ Time Travel operations can be performed on the data during this data retention p
 Below commands can be used to find the data retention period of data bases, schemas and tables.
 
 ```sql
-SHOW PARAMETERS IN DATABASE db_name;
+SHOW PARAMETERS IN DATABASE DB_NAME;
 
-SHOW PARAMETERS IN SCHEMA schema_name;
+SHOW PARAMETERS IN SCHEMA SCHEMA_NAME;
 
-SHOW PARAMETERS IN TABLE table_name;
+SHOW PARAMETERS IN TABLE TABLE_NAME;
 ```
 
 The **DATA\_RETENTION\_TIME\_IN\_DAYS** parameters specifies the number of days to retain the old version of deleted/updated data.
@@ -187,13 +187,13 @@ Time travel is automatically enabled with the standard, 1-day retention period. 
 You can configure the data retention period of a table while creating the table as shown below.
 
 ```sql
-CREATE TABLE mytable(col1 NUMBER, col2 DATE) data_retention_time_in_days=90;
+CREATE TABLE MYTABLE(COL1 NUMBER, COL2 DATE) DATA_RETENTION_TIME_IN_DAYS=90;
 ```
 
 To modify the data retention period of an existing table, use below syntax
 
 ```sql
-ALTER TABLE mytable SET data_retention_time_in_days=30;
+ALTER TABLE MYTABLE SET DATA_RETENTION_TIME_IN_DAYS=30;
 ```
 
 The below image shows that the data retention period of table is altered to 30 days.

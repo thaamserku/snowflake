@@ -5,29 +5,29 @@ source: https://thinketl.com/how-to-get-ddl-of-database-objects-in-snowflake/
 author: ThinkETL
 ---
 
-# HOW TO: Get DDL of database objects in Snowflake? 
-> [!Excerpt]
-> Snowflake provides GET_DDL Function using which DDL of database objects like tables, views, procedures etc., can be extracted.
+# HOW TO : Get DDL of database objects in Snowflake? 
 
----
-## **GET\_DDL Function**
+> Snowflake provides `GET_DDL` Function using which DDL of database objects like tables, views, procedures etc., can be extracted.
 
-Snowflake provides **GET\_DDL** Function using which DDL of database objects can be extracted. The GET\_DDL function returns a DDL statement as output that can be used to create the database objects. 
 
-GET\_DDL function takes object type and object name as input to generate the DDL of the required object.
+## **GET_DDL Function**
 
-## **Syntax of GET\_DDL Function**
+Snowflake provides **`GET_DDL`** Function using which DDL of database objects can be extracted. The `GET_DDL` function returns a DDL statement as output that can be used to create the database objects. 
 
-The syntax of GET\_DDL function in snowflake is as shown below
+`GET_DDL` function takes object type and object name as input to generate the DDL of the required object.
+
+## **Syntax of `GET_DDL` Function**
+
+The syntax of `GET_DDL` function in snowflake is as shown below
 
 ```sql
-GET_DDL( '<object_type>' , '[<namespace>.]<object_name>' )
+GET_DDL( '<OBJECT_TYPE>' , '[<NAMESPACE>.]<OBJECT_NAME>' )
 ```
 
-The **object\_type** argument specifies the type of the object for which DDL is required. Below are the valid object types that can be passed to the GET\_DDL function.
+The **object_type** argument specifies the type of the object for which DDL is required. Below are the valid object types that can be passed to the `GET_DDL` function.
 
 -   DATABASE
--   FILE\_FORMAT
+-   FILE_FORMAT
 -   FUNCTION (for UDFs, including external functions)
 -   PIPE
 -   POLICY (masking and row access policies)
@@ -40,45 +40,45 @@ The **object\_type** argument specifies the type of the object for which DDL is 
 -   TASK
 -   VIEW (including for materialized views)
 
-The **object\_name** argument specifies the name of the object for which DDL is required.
+The **object_name** argument specifies the name of the object for which DDL is required.
 
 The **namespace** argument is the database and/or schema in which the object resides which is **optional** if database and schema are in use in current session in the worksheet.
 
-Trigger the GET\_DDL function to extract the DDL of a Snowflake object as shown below.
+Trigger the `GET_DDL` function to extract the DDL of a Snowflake object as shown below.
 
 ```sql
-SELECT GET_DDL('<object_type>' , '[<namespace>.]<object_name>');
+SELECT GET_DDL('<OBJECT_TYPE>' , '[<NAMESPACE>.]<OBJECT_NAME>');
 ```
 
 The below example extracts the DDL of a table named **CUSTOMER**.
 
 ```sql
-SELECT GET_DDL('table', 'customer');
+SELECT GET_DDL('TABLE', 'CUSTOMER');
 ```
 
 If the database and schema are not in use, you can pass the complete namespace to extract DDL as shown below.
 
 ```sql
- SELECT GET_DDL('table', 'mydb.sales.customer');
+ SELECT GET_DDL('TABLE', 'MYDB.SALES.CUSTOMER');
 ```
 
-For databases and schemas, GET\_DDL is recursive i.e. it returns the DDL statements of all supported objects within the specified database/schema.
+For databases and schemas, `GET_DDL` is recursive i.e. it returns the DDL statements of all supported objects within the specified database/schema.
 
-The below example extracts the DDL of all supported objects present in the database **my\_db**.
+The below example extracts the DDL of all supported objects present in the database **my_db**.
 
 ```sql
-SELECT GET_DDL('database', 'my_db');
+SELECT GET_DDL('DATABASE', 'MY_DB');
 ```
 
-The below example extracts the DDL of all supported objects present in the schema **my\_schema**.
+The below example extracts the DDL of all supported objects present in the schema **my_schema**.
 
 ```sql
-SELECT GET_DDL('schema', 'my_db.my_schema');
+SELECT GET_DDL('SCHEMA', 'MY_DB.MY_SCHEMA');
 ```
 
-## **GET\_DDL Output**
+## **GET_DDL Output**
 
-By default the DDL statement returned by GET\_DDL function do not use a fully-qualified named of the object.
+By default the DDL statement returned by `GET_DDL` function do not use a fully-qualified named of the object.
 
 The below example shows the output of query providing the DDL of customer table without database and schema information.
 
@@ -86,10 +86,10 @@ The below example shows the output of query providing the DDL of customer table 
 
 DDL of Customer without fully-qualified name
 
-To return the DDL with fully-qualified named, use the **true** indicator in the syntax of GET\_DDL function as shown below.
+To return the DDL with fully-qualified named, use the **true** indicator in the syntax of `GET_DDL` function as shown below.
 
 ```sql
-GET_DDL( '<object_type>' , '[<namespace>.]<object_name>', true );
+GET_DDL( '<OBJECT_TYPE>' , '[<NAMESPACE>.]<OBJECT_NAME>', TRUE );
 ```
 
 The below example shows the output of query providing the DDL of customer table with a fully-qualified named providing the database and schema information.

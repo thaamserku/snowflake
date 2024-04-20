@@ -5,12 +5,12 @@ source: https://thinketl.com/change-data-capture-using-snowflake-streams/
 author: ThinkETL
 ---
 
-# Change Data Capture using Snowflake Streams - ThinkETL
+# Change Data Capture using Snowflake Streams 
 
-> ## Excerpt
+
 > A Stream is a Snowflake object that provides change data capture (CDC) capabilities to track the changes in a table.
 
----
+
 ## **Introduction**
 
 Change Data Capture (CDC) is a process that identifies and captures changes made to data in a database and then delivers those changes in real-time to a downstream process or system. There are several proven methods through which CDC can be implemented like making use of Audit Columns to identify the data that has been modified since the data last extracted.
@@ -34,9 +34,9 @@ Below are the additional metadata fields included in Streams along with Source o
 
 | **COLUMN NAME** | **DESCRIPTION** |
 | --- | --- |
-| **METADATA$ACTION** | Indicates the DML operation (**INSERT, DELETE**) recorded. |
-| **METADATA$ISUPDATE** | Indicates whether the operation was part of an **UPDATE** statement. Updates to rows in the source object are **_represented as a pair of DELETE and INSERT_** records in the stream with a metadata column METADATA$ISUPDATE values set to TRUE. |
-| **METADATA$ROW\_ID** | Specifies the unique and immutable ID for the row, which can be used to track changes to specific rows over time. |
+| **`METADATA$ACTION`** | Indicates the DML operation (**INSERT, DELETE**) recorded. |
+| **`METADATA$ISUPDATE`** | Indicates whether the operation was part of an **UPDATE** statement. Updates to rows in the source object are **_represented as a pair of DELETE and INSERT_** records in the stream with a metadata column METADATA$ISUPDATE values set to TRUE. |
+| **`METADATA$ROW_ID`** | Specifies the unique and immutable ID for the row, which can be used to track changes to specific rows over time. |
 
 ## **Stream** **Offset**
 
@@ -54,45 +54,45 @@ There are three different types of Streams supported in Snowflake
 2.  Append-only
 3.  Insert-only
 
-### **1\. Standard Streams**
+### **1. Standard Streams**
 
 A Standard (i.e. delta) stream tracks all DML changes to the source object, including inserts, updates, and deletes (including table truncates). Supported on standard tables, directory tables and views.
 
 The syntax to create Standard stream is as below
 
-```
+```sql
 CREATE OR REPLACE STREAM my_stream ON TABLE my_table;
 ```
 
-### **2\. Append-only Streams**
+### **2. Append-only Streams**
 
 An Append-only stream tracks row inserts only. Update and delete operations (including table truncates) are not recorded. Supported on standard tables, directory tables and views.
 
-The syntax to create Append-only streams similar to Standard streams except that the APPEND\_ONLY parameter value needs to be set to TRUE as below
+The syntax to create Append-only streams similar to Standard streams except that the APPEND_ONLY parameter value needs to be set to TRUE as below
 
-```
+```sql
 CREATE OR REPLACE STREAM my_stream ON TABLE my_table
 APPEND_ONLY = TRUE;
 ```
 
-### **3\. Insert-only Streams**
+### **3. Insert-only Streams**
 
 Supported for **External tables** only. An insert-only stream tracks row inserts only. They do not record delete operations that remove rows from an inserted set.
 
 The syntax to create Insert-only stream is as below
 
-```
+```sql
 CREATE OR REPLACE STREAM my_stream ON EXTERNAL TABLE my_table
 INSERT_ONLY = TRUE;
 ```
 
 ## **Demo on how Snowflake Streams Work**
 
-Let us understand how streams work through an example. Consider a table named EMPLOYEES\_RAW where the raw data is staged and the data finally needs to be loaded into EMPLOYEES tables.
+Let us understand how streams work through an example. Consider a table named EMPLOYEES_RAW where the raw data is staged and the data finally needs to be loaded into EMPLOYEES tables.
 
-The table named EMPLOYEES\_RAW is created and three records are inserted.
+The table named EMPLOYEES_RAW is created and three records are inserted.
 
-```
+```sql
 --create employees_raw table
 CREATE OR REPLACE TABLE EMPLOYEES_RAW(
     ID NUMBER,
@@ -106,9 +106,9 @@ INSERT INTO EMPLOYEES_RAW VALUES (102,'Chris',55000);
 INSERT INTO EMPLOYEES_RAW VALUES (103,'Bruce',40000);
 ```
 
-Let us create EMPLOYEES table and the for the first load lets copy data from EMPLOYEES\_RAW directly using Insert statement.
+Let us create EMPLOYEES table and the for the first load lets copy data from EMPLOYEES_RAW directly using Insert statement.
 
-```
+```sql
 --create employees table
 CREATE OR REPLACE TABLE EMPLOYEES(
     ID NUMBER,
@@ -120,9 +120,9 @@ CREATE OR REPLACE TABLE EMPLOYEES(
 INSERT INTO EMPLOYEES SELECT * FROM EMPLOYEES_RAW;
 ```
 
-The data now in EMPLOYEES\_RAW and EMPLOYEES table are in sync. Let us make few changes in data of raw table and track the changes through a Stream.
+The data now in EMPLOYEES_RAW and EMPLOYEES table are in sync. Let us make few changes in data of raw table and track the changes through a Stream.
 
-```
+```sql
 --create stream
 CREATE OR REPLACE STREAM MY_STREAM ON TABLE EMPLOYEES_RAW;
 ```
@@ -131,9 +131,9 @@ Initially when you query a stream, it will return null records as there are no D
 
 ![](https://thinketl.com/wp-content/uploads/2022/06/79-1-Stream.png)
 
-Let us insert two records and update two records in the raw table and verify the contents of the stream MY\_STREAM.
+Let us insert two records and update two records in the raw table and verify the contents of the stream MY_STREAM.
 
-```
+```sql
 --Insert two records
 INSERT INTO EMPLOYEES_RAW VALUES (104,'Clark',35000);
 INSERT INTO EMPLOYEES_RAW VALUES (105,'Steve',30000);
@@ -148,14 +148,14 @@ UPDATE EMPLOYEES_RAW SET SALARY = '45000' WHERE ID = '103';
 In the Stream we can observe that
 
 -   Employee records with ID 104 and 105 are inserted.  
-    The **METADATA$ACTION** for these records is set as **INSERT** and **METADATA$UPDATE** is set as **FALSE**.
+    The **`METADATA$ACTION`** for these records is set as **INSERT** and **`METADATA$UPDATE`** is set as **FALSE**.
 
--   The employee records with IDs 102 and 103 which got updated have two set of records, one with **METADATA$ACTION** set as **INSERT** and the other as **DELETE**.  
-    The field **METADATA$UPDATE** is set as **TRUE** for both the records indicating that these records are part of UPDATE operation.
+-   The employee records with IDs 102 and 103 which got updated have two set of records, one with **`METADATA$ACTION`** set as **INSERT** and the other as **DELETE**.  
+    The field **`METADATA$UPDATE`** is set as **TRUE** for both the records indicating that these records are part of UPDATE operation.
 
 Before consuming the data from stream, let us also perform another DML operation on already modified data and see how stream updates its data.
 
-```
+```sql
 --Delete one record
 DELETE FROM EMPLOYEES_RAW WHERE ID = '102';
 ```
@@ -172,7 +172,7 @@ In the above discussed example, though we have inserted 2 records, updated 2 rec
 
 The below select statements on the stream gives the details of records which needs to be inserted, updated and deleted in the target table.
 
-```
+```sql
 --INSERT
 SELECT * FROM MY_STREAM
 WHERE metadata$action = 'INSERT'
@@ -189,9 +189,9 @@ WHERE metadata$action = 'DELETE'
 AND metadata$isupdate = 'FALSE';
 ```
 
-Finally we can use a **MERGE** statement with the Stream using these filters to perform the insert, update and delete operations on target table as shown below.
+Finally we can use a **`MERGE`** statement with the Stream using these filters to perform the insert, update and delete operations on target table as shown below.
 
-```
+```sql
 MERGE INTO EMPLOYEES a USING MY_STREAM b ON a.ID = b.ID
   WHEN MATCHED AND metadata$action = 'DELETE' AND metadata$isupdate = 'FALSE' 
     THEN DELETE
@@ -212,11 +212,11 @@ The below image show that the merge operation inserted 2 records, updated 1 reco
 
 A stream becomes stale when its offset is outside of the data retention period for its source table. When a stream becomes stale, the historical data for the source table is no longer accessible, including any unconsumed change records.
 
-To view the current staleness status of a stream, execute the **DESCRIBE STREAM** or **SHOW STREAMS** command. The **STALE\_AFTER** column timestamp indicates when the stream is currently predicted to become stale.
+To view the current staleness status of a stream, execute the **`DESCRIBE STREAM`** or **`SHOW STREAMS`** command. The **`STALE_AFTER`** column timestamp indicates when the stream is currently predicted to become stale.
 
 ![](https://thinketl.com/wp-content/uploads/2022/06/79-5-Show-streams.png)
 
-> _To avoid having a stream become stale, it is strongly recommended to regularly consume the changed data before its **STALE\_AFTER** timestamp._
+> _To avoid having a stream become stale, it is strongly recommended to regularly consume the changed data before its **`STALE_AFTER`** timestamp._
 
 If the data retention period for a table is **less than 14 days**, and a stream has not been consumed, Snowflake temporarily extends this period to prevent it from going stale. The period is extended to the stream’s offset, up to a maximum of 14 days by default, regardless of the Snowflake edition for your account.
 
@@ -228,25 +228,3 @@ To summarize, Snowflake streams are a powerful way to handle changing data sets.
 
 Snowflake table streams are also often used in conjunction with other features, such as Snowflake [**Snowpipe**](https://thinketl.com/introduction-to-snowpipe-on-azure/) and Snowflake tasks. Be sure to check out our other blog posts for more details about Snowflake features.
 
-**Subscribe to our Newsletter !!**
-
-**Related Articles :**
-
--   [![Snowflake Zero Copy Cloning](https://thinketl.com/wp-content/uploads/2022/05/zero-copy-cloning.png)](https://thinketl.com/snowflake-zero-copy-cloning/)
-    
-    Snowflake’s Zero Copy Cloning feature is a quick and easy way to create copies of database objects without incurring any additional costs.
-    
-    [**READ MORE**](https://thinketl.com/snowflake-zero-copy-cloning/)
-    
--   [![Introduction to Snowpipe on Azure](https://thinketl.com/wp-content/uploads/2022/05/Snowpipe.png)](https://thinketl.com/introduction-to-snowpipe-on-azure/)
-    
-    A step by step guide on automating continuous data loading into Snowflake through Snowpipe on Microsoft Azure.
-    
-    [**READ MORE**](https://thinketl.com/introduction-to-snowpipe-on-azure/)
-    
--   [![Types of Views in Snowflake](https://thinketl.com/wp-content/uploads/2022/05/TYPES-OF-SNOWFLAKE-VIEWS.png)](https://thinketl.com/types-of-views-in-snowflake/)
-    
-    There are three different types of views in Snowflake – Non-Materialized, Materialized and Secure Views.
-    
-    [**READ MORE**](https://thinketl.com/types-of-views-in-snowflake/)
-#capture
