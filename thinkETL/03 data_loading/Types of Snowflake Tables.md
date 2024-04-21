@@ -2,12 +2,12 @@
 created: 2023-09-24T12:23:14 (UTC -04:00)
 tags: [snowflake, table]
 source: https://thinketl.com/types-of-snowflake-tables/
-author: ThinkETL
+updated: 2024-04-21 12:13:57
 ---
 
 # Types of Snowflake Tables
 
-> [!Excerpt]
+
 > Snowflake supports three types of tables namely Permanent, Temporary and Transient tables.
 
 
@@ -28,7 +28,7 @@ The data stored in permanent tables consumes space and contributes to the storag
 To create a Permanent table in Snowflake
 
 ```sql
-create table employee (id number, name varchar(50));
+CREATE TABLE EMPLOYEE (ID NUMBER, NAME VARCHAR(50));
 ```
 
 ## **Transient Table**
@@ -40,7 +40,7 @@ Transient tables, like permanent tables, contribute to your account’s overall
 To create a Transient table in Snowflake, You need to mention **_transient_** in the create table syntax.
 
 ```sql
-create transient table employee (id number, name varchar(50));
+CREATE TRANSIENT TABLE EMPLOYEE (ID NUMBER, NAME VARCHAR(50));
 ```
 
 ## **Temporary Table**
@@ -54,7 +54,7 @@ Though Temporary tables are dropped at the end of the session, Snowflake recomme
 To create a Temporary table in Snowflake, you need to mention **_temporary_** in the create table syntax.
 
 ```sql
-create temporary table employee (id number, name varchar(50));
+CREATE TEMPORARY TABLE EMPLOYEE (ID NUMBER, NAME VARCHAR(50));
 ```
 
 ## **Naming Conflicts** **between temporary and non-temporary tables**
@@ -90,27 +90,27 @@ Syntax to execute show tables in Snowflake is as below
 To get table details from a particular database and Schema
 
 ```sql
-SHOW TABLES IN <database_name>.<schema_name>;
+SHOW TABLES IN <DATABASE_NAME>.<SCHEMA_NAME>;
 ```
 
 To show all tables that start with ‘dim’
 
 ```sql
-SHOW TABLES LIKE 'dim%' IN <database_name>.<schema_name>;
+SHOW TABLES LIKE 'DIM%' IN <DATABASE_NAME>.<SCHEMA_NAME>;
 ```
 
 ![show tables in Snowflake](https://thinketl.com/wp-content/uploads/2022/02/69-1-Show-tables.png)
 
 > _The table type can be obtained from the field **kind** from the output._
 
-### **2. GET\_DDL**
+### **2. GET_DDL**
 
 Returns a DDL statement that can be used to recreate the specified object. The DDL statement contains the type of the Snowflake table.
 
 Syntax to get DDL of a table
 
 ```sql
-select get_ddl('table','<table_name>');
+SELECT GET_DDL('TABLE','<TABLE_NAME>');
 ```
 
 ![get_ddl in Snowflake](https://thinketl.com/wp-content/uploads/2022/02/69-2-get-ddl.png)
@@ -122,7 +122,7 @@ The Snowflake Information Schema (aka “Data Dictionary”) consists of a set o
 Syntax to use Information Schema
 
 ```sql
-select * from <database>.information_schema.tables where table_name = '<table_name>';
+SELECT * FROM <DATABASE>.INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '<TABLE_NAME>';
 ```
 
 ![Information Schema in Snowflake](https://thinketl.com/wp-content/uploads/2022/02/69-information-schema.png)

@@ -2,12 +2,12 @@
 created: 2023-09-07T21:00:10 (UTC -04:00)
 tags: [json, snowflake]
 source: https://thinketl.com/how-to-load-and-query-json-data-in-snowflake/
-author: ThinkETL
+updated: 2024-04-21 12:13:40
 ---
 
 # HOW TO: Load and Query JSON data in Snowflake?
 
-> Excerpt
+
 > Snowflake supports loading JSON data in database tables and allows querying data along with flattening it into a columnar structure.
 
 ## **Introduction**

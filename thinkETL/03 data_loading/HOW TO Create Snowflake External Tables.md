@@ -2,12 +2,11 @@
 created: 2023-09-07T20:59:23 (UTC -04:00)
 tags: [snowflake, external, table]
 source: https://thinketl.com/how-to-create-snowflake-external-tables/
-author: ThinkETL
+updated: 2024-04-21 12:13:35
 ---
 
 # HOW TO: Create Snowflake External Tables? - ThinkETL
 
-> [!Excerpt]
 > A quick guide explaining what are Snowflake External tables and how to create them using various methods.
 
 ## **Introduction to Snowflake External Tables**
@@ -39,7 +38,7 @@ Listing files in Snowflake Stage
 
 Below are the contents of the each of the files.
 
-```
+```sh
 HR/employee_001.csv
 ---------------------------------------------------------
 EMPLOYEE_ID,NAME,SALARY,DEPARTMENT_ID,JOINING_DATE

@@ -2,12 +2,12 @@
 created: 2023-09-07T20:58:11 (UTC -04:00)
 tags: [snowflake, stages]
 source: https://thinketl.com/types-of-snowflake-stages-data-loading-and-unloading-features/
-author: ThinkETL
+updated: 2024-04-21 12:13:52
 ---
 
 # Types of Snowflake Stages: Data Loading and Unloading Features
 
-> [!Excerpt]
+
 > A complete guide to types of Snowflake Stages and how to load data into and unload data from Snowflake tables using stages.
 
 ## **1. What are Snowflake Stages?**
@@ -69,7 +69,7 @@ Follow below steps to create an Internal Named Stage from web interface.
 The following statement creates an internal stage in Snowflake.
 
 ```sql
-create or replace stage my_internal_stage;
+CREATE OR REPLACE STAGE MY_INTERNAL_STAGE;
 ```
 
 > _Named stages are referenced using **@**_
@@ -153,15 +153,15 @@ put file://C:\SourceFiles\input.csv @my_internal_stage;
 The following statement loads data from file named input.csv prefixed with my\_stage\_dir in your **User stage** into table named EMPLOYEE.
 
 ```sql
-copy into EMPLOYEE from @~/my_stage_dir/input.csv;
+COPY INTO EMPLOYEE FROM @~/MY_STAGE_DIR/INPUT.CSV;
 ```
 
 The following statement loads data from file named input.csv prefixed with my\_stage\_dir in your **User stage** into table named EMPLOYEE by specifying a named file format.
 
 ```sql
-copy into EMPLOYEE
-from @~/my_stage_dir/input.csv
-file_format = (format_name = 'my_csv_format');
+COPY INTO EMPLOYEE
+FROM @~/MY_STAGE_DIR/INPUT.CSV
+FILE_FORMAT = (FORMAT_NAME = 'MY_CSV_FORMAT');
 ```
 
 ### **7.2. Loading from Table Stage into table**
@@ -169,7 +169,7 @@ file_format = (format_name = 'my_csv_format');
 The following statement loads data from file named input.csv in your **Table stage** into table named EMPLOYEE.
 
 ```sql
-copy into EMPLOYEE from @%EMPLOYEE/input.csv;
+COPY INTO EMPLOYEE FROM @%EMPLOYEE/INPUT.CSV;
 ```
 
 The **FROM** clause can be omitted while loading from **Table stage** because Snowflake automatically checks for files in the table stage.
@@ -179,15 +179,15 @@ The **FROM** clause can be omitted while loading from **Table stage** because Sn
 The following statement loads data from file named input.csv in your **Internal Named stage** named my\_internal\_stage into table named EMPLOYEE.
 
 ```sql
-copy into EMPLOYEE from @my_internal_stage/input.csv;
+COPY INTO EMPLOYEE FROM @MY_INTERNAL_STAGE/INPUT.CSV;
 ```
 
 The following statement loads data from file named input.csv in your **Internal Named stage** named my\_internal\_stage into table named EMPLOYEE by specifying a adhoc file format.
 
 ```sql
-copy into EMPLOYEE
-from @my_internal_stage/input.csv
-file_format = (type = csv field_delimiter = ',' skip_header = 0);
+COPY INTO EMPLOYEE
+FROM @MY_INTERNAL_STAGE/INPUT.CSV
+FILE_FORMAT = (TYPE = CSV FIELD_DELIMITER = ',' SKIP_HEADER = 0);
 ```
 
 ### **7.4. Loading from External Stage into table**
@@ -195,16 +195,16 @@ file_format = (type = csv field_delimiter = ',' skip_header = 0);
 The following statement loads data from file named input.csv in your **External stage** named my\_azure\_stage into table named EMPLOYEE.
 
 ```sql
-copy into EMPLOYEE from @my_azure_stage/input.csv;
+COPY INTO EMPLOYEE FROM @MY_AZURE_STAGE/INPUT.CSV;
 ```
 
 The data can be loaded from external locations into Snowflake directly without the use of stages. The following statement loads data from file named input.csv in your Azure location into table named EMPLOYEE.
 
 ```sql
-copy into EMPLOYEE
-  from 'azure://myazurespace.blob.core.windows.net/snowflake/input.csv'
-  storage_integration = azure_int
-  file_format = (format_name = my_csv_format);
+COPY INTO EMPLOYEE
+  FROM 'AZURE://MYAZURESPACE.BLOB.CORE.WINDOWS.NET/SNOWFLAKE/INPUT.CSV'
+  STORAGE_INTEGRATION = AZURE_INT
+  FILE_FORMAT = (FORMAT_NAME = MY_CSV_FORMAT);
 ```
 
 ## **8. Unloading data into Snowflake Stages from tables using COPY INTO command**
@@ -212,25 +212,25 @@ copy into EMPLOYEE
 The following statement unloads data into your **User stage** and prefixes the file with a folder named my\_stage\_dir from table named EMPLOYEE.
 
 ```sql
-copy into @~/my_stage_dir from EMPLOYEE;
+COPY INTO @~/MY_STAGE_DIR FROM EMPLOYEE;
 ```
 
 The following statement unloads data into your **Table stage** from table named EMPLOYEE.
 
 ```sql
-copy into @%EMPLOYEE from EMPLOYEE;
+COPY INTO @%EMPLOYEE FROM EMPLOYEE;
 ```
 
 The following statement unloads data into your **Internal Named stage** named my\_internal\_stage from table named EMPLOYEE.
 
 ```sql
-copy into @my_internal_stage from EMPLOYEE;
+COPY INTO @MY_INTERNAL_STAGE FROM EMPLOYEE;
 ```
 
 The following statement unloads data into your **External stage** named my\_azure\_stage from table named EMPLOYEE.
 
 ```sql
-copy into @my_azure_stage from EMPLOYEE;
+COPY INTO @MY_AZURE_STAGE FROM EMPLOYEE;
 ```
 
 ## **9. Unloading data into local folder from Snowflake Stages using GET command**

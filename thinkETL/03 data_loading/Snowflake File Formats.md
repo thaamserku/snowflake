@@ -2,12 +2,11 @@
 created: 2023-09-24T12:23:02 (UTC -04:00)
 tags: []
 source: https://thinketl.com/snowflake-file-formats/
-author: ThinkETL
+updated: 2024-04-21 12:13:45
 ---
 
 # Snowflake File Formats 
 
-> [!Excerpt]
 > Snowflake File format simplifies the process of accessing the staged data and streamlines data loading/unloading in database tables.
 
 ---
@@ -38,7 +37,7 @@ The following file formats are supported for loading only. The data cannot be un
 2.  ORC
 3.  XML
 
-## **3\. How to create Snowflake File Formats?**
+## **3. How to create Snowflake File Formats?**
 
 The Snowflake file formats can be created using two different methods.
 
@@ -47,17 +46,17 @@ The Snowflake file formats can be created using two different methods.
 
 ### **METHOD-1: Creating Snowflake file formats form WEB UI**
 
-1\. Navigate to _Databases_ in the Snowflake classic console present on the top of the page.
+1. Navigate to _Databases_ in the Snowflake classic console present on the top of the page.
 
-2\. Select the _database_ in which you wanted to create a file format.
+2. Select the _database_ in which you wanted to create a file format.
 
-3\. Go to _File Formats_ and click _Create_.
+3. Go to _File Formats_ and click _Create_.
 
 ![Creating Snowflake File Format from WEB UI](https://thinketl.com/wp-content/uploads/2022/07/88-1-Creating-Snowflake-file-formats-from-WEB-UI.png)
 
 Creating Snowflake File Format from WEB UI
 
-4\. In the create file format menu, complete the following mandatory parameters.
+4. In the create file format menu, complete the following mandatory parameters.
 
 -   **Name**: Specify a name for the file format. It must be unique for the schema in which the file format is created.
 -   **Schema**: The Schema in which the file format to be created.
@@ -65,13 +64,13 @@ Creating Snowflake File Format from WEB UI
 
 Rest of the parameters are optional and vary according to the file format type you choose.
 
-The below image shows a file format MY\_CSV\_FORMAT of type CSV created in schema MY\_SCHEMA.
+The below image shows a file format MY_CSV_FORMAT of type CSV created in schema MY_SCHEMA.
 
 ![Specifying File Format parameters](https://thinketl.com/wp-content/uploads/2022/07/88-2-Creating-Snowflake-file-formats-from-WEB-UI.png)
 
 Specifying File Format parameters
 
-5\. Click _Finish_ to create the File Format.
+5. Click _Finish_ to create the File Format.
 
 The created file formats are available under _File Formats_. As an owner of the file format, you have rights to clone, edit drop and transfer its ownership to other roles and users.
 
@@ -84,72 +83,72 @@ Created File Formats in Snowflake
 The syntax to create Snowflake file format using SQL statement is as shown below.
 
 ```sql
-create or replace file format <file format name>
-  type = <file format type>
-  <optional parameters>
+CREATE OR REPLACE FILE FORMAT <FILE FORMAT NAME>
+  TYPE = <FILE FORMAT TYPE>
+  <OPTIONAL PARAMETERS>
 ;
 ```
 
-The below example shows a CSV file format named _my\_csv\_format_ with filed delimiter as comma which includes a single header line that will be skipped.
+The below example shows a CSV file format named _my_csv_format_ with filed delimiter as comma which includes a single header line that will be skipped.
 
 ```sql
-create or replace file format my_csv_format
-  type = csv
-  field_delimiter = ','
-  skip_header = 1
+CREATE OR REPLACE FILE FORMAT MY_CSV_FORMAT
+  TYPE = CSV
+  FIELD_DELIMITER = ','
+  SKIP_HEADER = 1
 ;
 ```
 
-The below example shows a JSON file format named _my\_json\_format_ that uses all the default JSON format options.
+The below example shows a JSON file format named _my_json_format_ that uses all the default JSON format options.
 
 ```sql
-create or replace file format my_json_format
-  type = json;
+CREATE OR REPLACE FILE FORMAT MY_JSON_FORMAT
+  TYPE = JSON;
 ```
 
 > _When you don’t specify the optional file format parameters, default values of those parameters are considered._
 
-## **4\. Where Snowflake File formats are used?**
+## **4. Where Snowflake File formats are used?**
 
 Snowflake file formats are used while loading/unloading data from Snowflake stages into tables using [**COPY INTO**](https://thinketl.com/types-of-snowflake-stages-data-loading-and-unloading-features/#53_COPY_INTO_command) command and while creating [**EXTERNAL TABLES**](https://thinketl.com/how-to-create-snowflake-external-tables/) on files present in stages.
 
-The following example shows loading data into Employee table from stage named my\_stage using file format my\_csv\_format.
+The following example shows loading data into Employee table from stage named my_stage using file format my_csv_format.
 
 ```sql
-copy into EMPLOYEE from @my_stage/input.csv
-file_format = (format_name = my_csv_format);
+COPY INTO EMPLOYEE FROM @MY_STAGE/INPUT.CSV
+FILE_FORMAT = (FORMAT_NAME = MY_CSV_FORMAT);
 ```
 
-The following example shows creating an external table my\_ext\_table on top of employee files using file format my\_csv\_format.
+The following example shows creating an external table my_ext_table on top of employee files using file format my_csv_format.
 
 ```sql
-CREATE OR REPLACE EXTERNAL TABLE my_ext_table
-  WITH LOCATION = @my_azure_stage/
-  FILE_FORMAT = (format_name = my_csv_format)
-  PATTERN='.*employee.*[.]csv';
+CREATE OR REPLACE EXTERNAL TABLE MY_EXT_TABLE
+  WITH LOCATION = @MY_AZURE_STAGE/
+  FILE_FORMAT = (FORMAT_NAME = MY_CSV_FORMAT)
+  PATTERN='.*EMPLOYEE.*[.]CSV';
 ```
 
-## **5\. Specifying Adhoc File Formats in Snowflake**
+## **5. Specifying Adhoc File Formats in Snowflake**
 
 Alternatively the file formats can be specified on adhoc basis while creating external tables or performing data loading/unloading operations.
 
-The following example shows loading data into Employee table from stage named my\_stage using an adhoc CSV file format.
+The following example shows loading data into Employee table from stage named my_stage using an adhoc CSV file format.
 
 ```sql
-copy into EMPLOYEE from @my_stage/input.csv
-file_format = (type = csv field_delimiter = ',' skip_header = 1);
+COPY INTO EMPLOYEE FROM @MY_STAGE/INPUT.CSV
+FILE_FORMAT = (TYPE = CSV FIELD_DELIMITER = ',' SKIP_HEADER = 1);
 ```
 
-The following example shows creating an external table my\_ext\_table on top of employee files using file adhoc CSV file format.
+The following example shows creating an external table my_ext_table on top of employee files using file adhoc CSV file format.
 
 ```sql
-CREATE OR REPLACE EXTERNAL TABLE my_ext_table
-  WITH LOCATION = @my_azure_stage/
+CREATE OR REPLACE EXTERNAL TABLE MY_EXT_TABLE
+  WITH LOCATION = @MY_AZURE_STAGE/
   FILE_FORMAT = (TYPE = CSV  SKIP_HEADER = 1)  
-  PATTERN='.*employee.*[.]csv';
+  PATTERN='.*EMPLOYEE.*[.]CSV';
 ```
 
-## **6\. Closing Points**
+## **6. Closing Points**
 
 In order to able to create file formats in Snowflake, the users must be assigned with a role having CREATE FILE FORMAT privileges at a minimum. Note that operating on any object (file formats, tables, sequences etc.) in a schema also requires the USAGE privilege on the parent database and schema.
 

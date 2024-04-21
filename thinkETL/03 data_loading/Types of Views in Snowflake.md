@@ -2,12 +2,12 @@
 created: 2023-09-24T12:23:24 (UTC -04:00)
 tags: [snowflake, view]
 source: https://thinketl.com/types-of-views-in-snowflake/
-author: ThinkETL
+updated: 2024-04-21 12:14:01
 ---
 
 # Types of Views in Snowflake
 
->[!Excerpt]
+
 > There are three different types of views in Snowflake - Non-Materialized, Materialized and Secure Views.
 
 
@@ -22,9 +22,9 @@ A View can be considered as a virtual table and can be used almost anywhere that
 A View can be created using **CREATE VIEW** command using below syntax in Snowflake.
 
 ```sql
-CREATE OR REPLACE VIEW my_view AS
+CREATE OR REPLACE VIEW MY_VIEW AS
 
-SELECT * FROM my_table;
+SELECT * FROM MY_TABLE;
 ```
 
 There are three broad categories of views in Snowflake.
@@ -39,7 +39,7 @@ Consider below patient’s data for the demo on views.
 
 ![PATIENT_DETAILS table](https://thinketl.com/wp-content/uploads/2022/05/77-1-Patient_details-1024x225.png)
 
-PATIENT\_DETAILS table
+PATIENT_DETAILS table
 
 ## **Non-Materialized Views**
 
@@ -49,11 +49,11 @@ PATIENT\_DETAILS table
 -   Performance is slower than compared to materialized views.
 -   The syntax to create a non-materialized view is same as creating a view.
 
-Below is an example of non-materialized view created on top of PATIENT\_DETAILS table selecting only the details(fields) which are required for a doctor.
+Below is an example of non-materialized view created on top of PATIENT_DETAILS table selecting only the details(fields) which are required for a doctor.
 
 ```sql
-CREATE OR REPLACE VIEW doctor_view AS
-SELECT patient_id, patient_name, diagnosis, treatment FROM PATIENT_DETAILS;
+CREATE OR REPLACE VIEW DOCTOR_VIEW AS
+SELECT PATIENT_ID, PATIENT_NAME, DIAGNOSIS, TREATMENT FROM PATIENT_DETAILS;
 ```
 
 ## **Materialized Views**
@@ -71,11 +71,11 @@ SELECT patient_id, patient_name, diagnosis, treatment FROM PATIENT_DETAILS;
 
 To create a materialized view, use the **MATERIALIZED** keyword with the standard DDL of non-materialized-views.
 
-Below is an example of materialized view created on top of PATIENT\_DETAILS table selecting only the details(fields) which are required for finance team.
+Below is an example of materialized view created on top of PATIENT_DETAILS table selecting only the details(fields) which are required for finance team.
 
 ```sql
-CREATE OR REPLACE MATERIALIZED VIEW accountant_view AS
-     SELECT patient_id, patient_name, billing_address, cost FROM PATIENT_DETAILS;
+CREATE OR REPLACE MATERIALIZED VIEW ACCOUNTANT_VIEW AS
+     SELECT PATIENT_ID, PATIENT_NAME, BILLING_ADDRESS, COST FROM PATIENT_DETAILS;
 ```
 
 ## **Secure Views**
@@ -88,10 +88,10 @@ CREATE OR REPLACE MATERIALIZED VIEW accountant_view AS
 
 To create a Secure view, use the **SECURE** keyword with the standard DDL for views.
 
-Below is an example of secure view created on top of PATIENT\_DETAILS
+Below is an example of secure view created on top of PATIENT_DETAILS
 
 ```sql
-CREATE OR REPLACE SECURE VIEW patient_view AS
+CREATE OR REPLACE SECURE VIEW PATIENT_VIEW AS
     SELECT * FROM PATIENT_DETAILS;
 ```
 
@@ -105,9 +105,9 @@ The below image shows SHOW VIEWS command listing all the views we have created a
 
 Executing SHOW VIEWS with owner role
 
-Since the ACCOUNT\_ADMIN is owner of the Secure View PATIENT\_VIEW, the view definition is visible under the column text.
+Since the ACCOUNT_ADMIN is owner of the Secure View PATIENT_VIEW, the view definition is visible under the column text.
 
-Check the **IS\_SECURE** column in the output of the SHOW VIEWS command to find out whether a view is secure or not.
+Check the **IS_SECURE** column in the output of the SHOW VIEWS command to find out whether a view is secure or not.
 
 ### **Accessing Secure Views from a different role**
 
@@ -117,7 +117,7 @@ The below commands provide **read only** access to SYSADMIN on all the views cre
 
 ```sql
 USE ROLE ACCOUNTADMIN;
-GRANT SELECT ON ALL VIEWS IN SCHEMA analytics.health_care TO ROLE SYSADMIN;
+GRANT SELECT ON ALL VIEWS IN SCHEMA ANALYTICS.HEALTH_CARE TO ROLE SYSADMIN;
 ```
 
 Let us verify the view definition from SYSADMIN role.

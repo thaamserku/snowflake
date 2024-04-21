@@ -2,12 +2,11 @@
 created: 2023-09-24T12:22:52 (UTC -04:00)
 tags: [partition, micro, snowflake]
 source: https://thinketl.com/snowflake-micro-partitions-and-data-clustering/
-author: ThinkETL
+updated: 2024-04-21 12:13:48
 ---
 
 # Snowflake Micro-Partitions & Data Clustering
 
-> [!Excerpt]
 > Learn about Snowflake Micro-partitioning method and how the storage can be organized using Data Clustering in Snowflake.
 
 ## **1. Introduction**
@@ -51,8 +50,8 @@ Row 2 and row 23 are two particular rows of data that have been highlighted to s
 Now consider that you wanted to retrieve records that belong to date ‘11/2’ from the above example.
 
 ```sql
-SELECT type, country FROM MY_TABLE
-WHERE Date = '11/2' ;
+SELECT TYPE, COUNTRY FROM MY_TABLE
+WHERE DATE = '11/2' ;
 ```
 
 The data of the records that belong to date ‘11/2’ is present in micro-partitions 1, 2 and 3. Similarly for other dates, the data is spread across micro-partitions is as depicted below.
@@ -91,33 +90,33 @@ A clustering key can be defined when a table is created by appending a **CLUSTER
 
 ```sql
 CREATE TABLE MY_TABLE (
-    type NUMBER
-  , name VARCHAR(50)
-  , country VARCHAR(50)
-  , date DATE
+    TYPE NUMBER
+  , NAME VARCHAR(50)
+  , COUNTRY VARCHAR(50)
+  , DATE DATE
 )
-CLUSTER BY (date) ;
+CLUSTER BY (DATE) ;
 ```
 
 In the above example we have created a table with clustered key. However you can also cluster a table by specifying a **CLUSTER KEY** at a later point in time using **ALTER TABLE** as shown below.
 
 ```sql
 ALTER TABLE MY_TABLE
-CLUSTER BY (date) ;
+CLUSTER BY (DATE) ;
 ```
 
 Although we have just used one field as a clustering key in our example, this is not the only choice. A clustering key can be defined using many fields if desired as shown below.
 
 ```sql
 ALTER TABLE MY_TABLE
-CLUSTER BY (date, type) ;
+CLUSTER BY (DATE, TYPE) ;
 ```
 
 Another advantage is that Snowflake also supports expressions on fields in a cluster key. The below example shows the table is clustered using the year of the _date_ field and first two letters of _country_ field.
 
 ```sql
 ALTER TABLE MY_TABLE
-CLUSTER BY (YEAR(date), SUBSTRING(country,1,2)) ;
+CLUSTER BY (YEAR(DATE), SUBSTRING(COUNTRY,1,2)) ;
 ```
 
 ## **7. Reclustering**
@@ -145,21 +144,21 @@ Automatic Clustering is the Snowflake service that seamlessly and continually ma
 To suspend Automatic Clustering for a table, use the **ALTER TABLE** command with a **SUSPEND RECLUSTER** clause. For example:
 
 ```sql
-ALTER TABLE my_table
+ALTER TABLE MY_TABLE
 SUSPEND RECLUSTER ;
 ```
 
 To resume Automatic Clustering for a clustered table, use the **ALTER TABLE** command with a **RESUME RECLUSTER** clause. For example:
 
 ```sql
-ALTER TABLE my_table
+ALTER TABLE MY_TABLE
 RESUME RECLUSTER ;
 ```
 
 Verify if Automatic Clustering is enable for a table using **SHOW TABLES** command.
 
 ```sql
-SHOW TABLES LIKE 'my_table';
+SHOW TABLES LIKE 'MY_TABLE';
 ```
 
 ## **9. Clustering Information**
@@ -171,41 +170,41 @@ If no list of columns is provided, the function will instead return the clusteri
 The syntax to execute the function is as shown below
 
 ```sql
-SELECT SYSTEM$CLUSTERING_INFORMATION('my_table', '(date, type)');
+SELECT SYSTEM$CLUSTERING_INFORMATION('MY_TABLE', '(DATE, TYPE)');
 ```
 
 The function returns a JSON object containing the following name/value pairs:
 
-### **9.1. cluster\_by\_keys**
+### **9.1. cluster_by_keys**
 
 -   Columns in table used to return clustering information. The columns which you pass as arguments to the function.
 
-### **9.2. total\_partition\_count**
+### **9.2. total_partition_count**
 
 -   Total number of micro-partitions that comprise the table.
 
-### **9.3. total\_constant\_partition\_count**
+### **9.3. total_constant_partition_count**
 
 -   Total number of micro-partitions for which the value of the specified columns have reached a constant state i.e. the micro-partitions will not benefit significantly from reclustering. As this number increases, we can expect query pruning to improve and queries to execute more efficiently.
 
-### **9.4. average\_overlaps**
+### **9.4. average_overlaps**
 
 -   The term “**Overlap**” indicates the number of partitions which share the same specified column value.
 -   For each micro-partition in the table, this gives the average number of overlapping micro-partitions. A high number indicates the table is not well-clustered.
 
-### **9.5. average\_depth**
+### **9.5. average_depth**
 
 -   The term “**Depth**” indicates the number of partitions in which same column value exists when an overlap occurs.
 -   For each micro-partition in the table, this gives the average overlap depth. A high number indicates the table is not well-clustered.
--   This value is also returned by **SYSTEM$CLUSTERING\_DEPTH**.
+-   This value is also returned by **SYSTEM$CLUSTERING_DEPTH**.
 
-### **9.6. partition\_depth\_histogram**
+### **9.6. partition_depth_histogram**
 
 -   A histogram depicting the distribution of overlap depth for each micro-partition in the table. The histogram contains buckets with widths:
     -   0 to 16 with increments of 1.
     -   For buckets larger than 16, increments of twice the width of the previous bucket (e.g. 32, 64, 128, …).
 
-I have included below an example provided by snowflake showing output of **system$clustering\_information**
+I have included below an example provided by snowflake showing output of **system$clustering_information**
 
 ```json
 {
