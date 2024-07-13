@@ -2,7 +2,6 @@
 created: 2023-09-30T11:11:23 (UTC -04:00)
 tags: [snowflake, storedproc, exceptions]
 source: https://thinketl.com/exceptions-in-snowflake-stored-procedures/
-author: ThinkETL
 ---
 
 # Exceptions in Snowflake Stored Procedures

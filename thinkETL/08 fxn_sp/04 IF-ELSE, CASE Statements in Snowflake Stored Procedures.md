@@ -2,20 +2,20 @@
 created: 2023-09-04T15:04:29 (UTC -04:00)
 tags: [if-else,case,conditoinal]
 source: https://thinketl.com/if-else-case-statements-in-snowflake-stored-procedures/
-author: ThinkETL
+updated: 2024-04-21 13:00:28
 ---
 
 # IF-ELSE, CASE Statements in Snowflake Stored Procedures
 
 
-## Introduction
+## 1. Introduction
 
 Snowflake Stored Procedures supports following branching constructs in the stored procedure definition.
 
 -   IF ELSE
 -   CASE
 
-## IF Statement
+## 2. IF Statement
 
 **IF statement in Snowflake provides a way to execute a set of statements if a condition is met.**
 
@@ -72,7 +72,7 @@ SP_DEMO_IF
 
 Maximum Number: 435
 
-## CASE Statement
+## 3. CASE Statement
 
 **CASE statement in Snowflake lets you define different conditions using WHEN clause and returns a value when first condition is met. This is also referred as Searched CASE statement.**
 
@@ -130,7 +130,7 @@ CALL sp_demo_case(11,425,35);
  Maximum Number: 425
 
 
-## Simple CASE Statement
+## 4. Simple CASE Statement
 
 **A Simple CASE Statement allows you to define a single condition and all the possible output values of defined condition under different branches using WHEN clause.**
 

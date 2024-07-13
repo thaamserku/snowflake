@@ -2,11 +2,12 @@
 created: 2023-09-04T15:07:10 (UTC -04:00)
 tags: [snowflake, storedproc, looping]
 source: https://thinketl.com/looping-in-snowflake-stored-procedures/
-author: ThinkETL
+updated: 2024-04-21 13:07:07
 ---
 
 # Looping in Snowflake Stored Procedures
 
+## 1. Loops
 
 The following are the different type of Loops supported in Snowflake Stored Procedures.
 
@@ -16,6 +17,8 @@ The following are the different type of Loops supported in Snowflake Stored Proc
 - LOOP
 
 In this article let us discuss about the different loops in Snowflake Stored Procedures with examples.
+
+## 2. For Loop
 
 **A FOR loop enables a particular set of steps to be executed for a specified number of times until a condition is satisfied.**
 
@@ -108,7 +111,7 @@ SP_DEMO_REVERSE_FOR_LOOP
 5 4 3 2 1
 
 
-## **WHILE Loop in Snowflake Stored Procedures**
+## 2. WHILE Loop
 
 **A WHILE loop iterates _while_ a specified condition is true. The condition for the loop is tested immediately before executing the body of the loop in WHILE loop. If the condition is false, the loop is not executed even once.**
 
@@ -162,7 +165,7 @@ SP_DEMO_WHILE_LOOP
 
 
 
-## **REPEAT Loop in Snowflake Stored Procedures**
+## 3. REPEAT Loop 
 
 **A REPEAT loop iterates _until_ a specified condition is true. This is similar to DO WHILE loop in other programming languages which tests the condition at the end of the loop. This means that the body of a REPEAT loop always executes at least once.**
 
@@ -210,7 +213,7 @@ SP_DEMO_REPEAT
 28
 
 
-## **LOOP Loop in Snowflake Stored Procedures**
+## 4. LOOP Loop 
 
 **A LOOP loop executes until a BREAK command is executed. It does not specify a number of iterations or a terminating condition.**
 
@@ -253,7 +256,7 @@ $$
 ;
 ```
 
-The output of the procedure with **REPEAT** Loop is as follows.
+The output of the procedure with **LOOP** Loop is as follows.
 SP_DEMO_LOOP
 36
 

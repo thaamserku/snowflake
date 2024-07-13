@@ -5,7 +5,7 @@ source: https://thinketl.com/execute-immediate-in-snowflake-stored-procedures/
 author: ThinkETL
 ---
 
-# EXECUTE IMMEDIATE in Snowflake Stored Procedures
+## 1.EXECUTE IMMEDIATE in Snowflake Stored Procedures
 
 
 **EXECUTE IMMEDIATE** command in Snowflake executes SQL statements present in form a string literal (character sets enclosed by single quotes or double dollar signs). EXECUTE IMMEDIATE returns the result of the executed SQL statement.

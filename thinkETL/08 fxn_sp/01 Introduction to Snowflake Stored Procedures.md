@@ -2,7 +2,7 @@
 created: 2023-09-04T14:58:49 (UTC -04:00)
 tags: [stored proc, snowscripting, snowflake]
 source: https://thinketl.com/introduction-to-snowflake-stored-procedures/
-author: ThinkETL
+updated: 2024-04-21 12:50:12
 ---
 
 # Introduction to Snowflake Stored Procedures 
@@ -20,12 +20,12 @@ Snowflake supports writing stored procedures in multiple languages. In this arti
 The following is the basic syntax for creating Stored Procedures in Snowflake.
 
 ```sql
-CREATE OR REPLACE PROCEDURE <name> ( [ <arg_name> <arg_data_type> ] [ , ... ] )
-   RETURNS <result_data_type>
+CREATE OR REPLACE PROCEDURE <NAME> ( [ <ARG_NAME> <ARG_DATA_TYPE> ] [ , ... ] )
+   RETURNS <RESULT_DATA_TYPE>
    LANGUAGE SQL
 AS
    $$
-      <procedure_body>
+      <PROCEDURE_BODY>
    $$
 ;
 ```
@@ -49,13 +49,13 @@ A Stored Procedures can be built which takes one or more arguments as input para
 
 ```sql
 -- Stored Procedure with multiple input arguments
-CREATE OR REPLACE PROCEDURE my_proc( id NUMBER, name VARCHAR)
+CREATE OR REPLACE PROCEDURE MY_PROC( ID NUMBER, NAME VARCHAR)
 
 -- Stored Procedure with single input argument
-CREATE OR REPLACE PROCEDURE my_proc( id NUMBER)
+CREATE OR REPLACE PROCEDURE MY_PROC( ID NUMBER)
 
 -- Stored Procedure with no input arguments
-CREATE OR REPLACE PROCEDURE my_proc()
+CREATE OR REPLACE PROCEDURE MY_PROC()
 ```
 
 
@@ -64,7 +64,7 @@ CREATE OR REPLACE PROCEDURE my_proc()
 Specifies the type of the result returned by the stored procedure.
 
 ```sql
-CREATE OR REPLACE PROCEDURE my_proc()
+CREATE OR REPLACE PROCEDURE MY_PROC()
    RETURNS VARCHAR
 ```
 
@@ -73,7 +73,7 @@ CREATE OR REPLACE PROCEDURE my_proc()
 Since Snowflake supports stored procedures in multiple languages, the **LANGUAGE** parameter specifies the language of the stored procedure definition. For Snowflake scripting, the value to the LANGUAGE parameter is passed as **SQL**.
 
 ```sql
-CREATE OR REPLACE PROCEDURE my_proc()
+CREATE OR REPLACE PROCEDURE MY_PROC()
    RETURNS VARCHAR
    LANGUAGE SQL
 ```
@@ -88,11 +88,11 @@ The Stored Procedure Body is made up of multiple sections. The various sections 
 
 ```sql
 DECLARE
-  ... (variable declarations, cursor declarations, etc.) ...
+  ... (VARIABLE DECLARATIONS, CURSOR DECLARATIONS, ETC.) ...
 BEGIN
-  ... (Snowflake Scripting and SQL statements) ...
+  ... (SNOWFLAKE SCRIPTING AND SQL STATEMENTS) ...
 EXCEPTION
-  ... (statements for handling exceptions) ...
+  ... (STATEMENTS FOR HANDLING EXCEPTIONS) ...
 END;
 ```
 
@@ -114,7 +114,7 @@ A simple stored procedure body just requires BEGIN and END sections.
 
 ```sql
 BEGIN
-      CREATE TABLE employees(id NUMBER, firstname VARCHAR);
+      CREATE TABLE EMPLOYEES(ID NUMBER, FIRSTNAME VARCHAR);
 END;
 ```
 
@@ -125,17 +125,17 @@ Consider a use case where the requirement is to purge the inactive employees’ 
 The below Stored Procedure deletes all records with status field value as ‘INACTIVE’ from the employees table.
 
 ```sql
-CREATE OR REPLACE PROCEDURE purge_data()
+CREATE OR REPLACE PROCEDURE PURGE_DATA()
     RETURNS VARCHAR
     LANGUAGE SQL
 AS
  $$
     DECLARE
-        message VARCHAR;
+        MESSAGE VARCHAR;
     BEGIN
-        DELETE FROM employees WHERE status = 'INACTIVE';
-        message := 'Inactive employees data deleted successfully';
-        RETURN message;
+        DELETE FROM EMPLOYEES WHERE STATUS = 'INACTIVE';
+        MESSAGE := 'INACTIVE EMPLOYEES DATA DELETED SUCCESSFULLY';
+        RETURN MESSAGE;
     END;
  $$
 ;
@@ -160,17 +160,17 @@ Consider another scenario where you wanted to purge the data from a table based 
 The below Stored Procedure deletes all records with status value that matches the value passed as an input through an input parameter `in_status` from the employees table.
 
 ```sql
-CREATE OR REPLACE PROCEDURE purge_data_by_status(in_status VARCHAR)
+CREATE OR REPLACE PROCEDURE PURGE_DATA_BY_STATUS(IN_STATUS VARCHAR)
     RETURNS VARCHAR
     LANGUAGE SQL
 AS
  $$
     DECLARE
-        message VARCHAR;
+        MESSAGE VARCHAR;
     BEGIN
-        DELETE FROM employees WHERE status = :in_status;
-        message := in_status ||' employees data deleted sucessfully';
-        RETURN message;
+        DELETE FROM EMPLOYEES WHERE STATUS = :IN_STATUS;
+        MESSAGE := IN_STATUS ||' EMPLOYEES DATA DELETED SUCESSFULLY';
+        RETURN MESSAGE;
     END;
  $$
 ;
@@ -185,14 +185,14 @@ The above stored procedure is similar to that of the one defined under section-4
 The above stored procedure can be simplified by eliminating the DECLARE section as shown below.
 
 ```sql
-CREATE OR REPLACE PROCEDURE purge_data_by_status(in_status VARCHAR)
+CREATE OR REPLACE PROCEDURE PURGE_DATA_BY_STATUS(IN_STATUS VARCHAR)
 	RETURNS VARCHAR
     LANGUAGE SQL
 AS
 $$
 BEGIN
-	DELETE FROM employees WHERE status = :in_status;
-	RETURN in_status ||' employees data deleted successfully';
+	DELETE FROM EMPLOYEES WHERE STATUS = :IN_STATUS;
+	RETURN IN_STATUS ||' EMPLOYEES DATA DELETED SUCCESSFULLY';
 END;
 $$
 ;
@@ -205,7 +205,7 @@ Use CALL command to execute a stored procedure in Snowflake.
 The following is the syntax to CALL command
 
 ```sql
-CALL <procedure_name> ( [ <arg1> , ... ] )
+CALL <PROCEDURE_NAME> ( [ <ARG1> , ... ] )
 ```
 
 The below image shows calling a stored procedure named `purge_data` and the output of the stored procedure call.
@@ -217,7 +217,7 @@ Call Stored Procedure without any Input Parameters
 The below image shows calling a stored procedure named `purge_data_by_status` with a string input parameter _‘**INACTIVE**’_ and the output of the stored procedure call.
 
 ```sql
-CALL purge_data_by_status('INACTIVE');
+CALL PURGE_DATA_BY_STATUS('INACTIVE');
 ```
 
 ![Call Stored Procedure with Input Parameters](https://thinketl.com/wp-content/uploads/2023/02/113-2-Call-Stored-Procedure-with-Input-Parameters.png)

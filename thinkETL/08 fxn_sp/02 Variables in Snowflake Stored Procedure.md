@@ -2,17 +2,18 @@
 created: 2023-09-04T15:00:42 (UTC -04:00)
 tags: []
 source: https://thinketl.com/variables-in-snowflake-stored-procedure/
-author: ThinkETL
+updated: 2024-04-21 12:55:00
 ---
 
-# Variables in Snowflake Stored Procedure 
+# Variables in Snowflake Stored Procedure
 
+## 1.Variables
 
 A Variable is a named object which holds a value of a specific data type whose value can change during the stored procedure execution. Variables in Snowflake stored procedures are local to stored procedures are used to hold intermediate results.
 
 In this article let us discuss in-detail about declaring and using variables in Snowflake Stored Procedures. To learn more about creating a Stored Procedure, refer our article – **[Introduction to Snowflake Stored Procedures](https://thinketl.com/introduction-to-snowflake-stored-procedures/)**
 
-## **2\. Declaring Variables in Snowflake Stored Procedures**
+## 2. Declaring Variables in Snowflake Stored Procedures
 
 A Variable must be declared before using it in Stored Procedures. When a variable is declared, the type of the variable must be specified by either:
 
@@ -67,7 +68,7 @@ LET net_sales NUMBER(38,2) DEFAULT 98.67;
 
 > _Note that the variable should be preceded with **LET** command while declaring variables in BEGIN…END section of the body._
 
-## **3\. Assigning values to Declared Variables in Snowflake Stored Procedures**
+## 3. Assigning values to Declared Variables in Snowflake Stored Procedures
 
 To assign a value to a variable that has already been declared, use the **:=** operator:
 
@@ -101,7 +102,7 @@ BEGIN
 END;
 ```
 
-## **4\. Using a Variable in a SQL Statement (Binding)**
+## 4. Using a Variable in a SQL Statement (Binding)
 
 The variables declared in the stored procedure can be used in the SQL statements using **colon as prefix** to the variable name. For example:
 
@@ -123,7 +124,7 @@ LET sql_stmt := 'DELETE FROM EMPLOYEES WHERE ID = ' || in_employeeid;
 
 Note that if you are using the variable with RETURN, you do not need the colon prefix. For example:
 
-## **5\. Assigning result of a SQL statement to Variables using INTO clause in Snowflake Stored Procedures**
+## 5. Assigning result of a SQL statement to Variables using INTO clause in Snowflake Stored Procedures
 
 You can assign expression result of a SELECT statement to Variables in Snowflake Stored Procedures using **INTO** clause.
 
@@ -173,7 +174,7 @@ When the stored procedure is executed, the output returns the concatenated value
 
 <table><tbody><tr><td><strong>GET_EMPLOYEEDATA</strong></td></tr><tr><td>101 TONY</td></tr></tbody></table>
 
-## **6\. Variable Scope in Snowflake Stored Procedures**
+## 6. Variable Scope in Snowflake Stored Procedures
 
 If you have nested blocks in your stored procedures and multiple variables with same name are declared in it, the scope of the variable will be local to the block its declared.
 

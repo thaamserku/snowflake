@@ -2,12 +2,12 @@
 created: 2023-09-07T21:20:31 (UTC -04:00)
 tags: [snowflake, udf,functions]
 source: https://thinketl.com/snowflake-user-defined-functions-udfs/
-author: ThinkETL
+updated: 2024-04-21 12:44:57
 ---
 
 # Snowflake User-Defined Functions (UDFs)
 
-> ## Excerpt
+
 > UDF is a reusable component defined by user to perform a specific task which can be called from a SQL statement.
 
 ---
@@ -49,12 +49,12 @@ Let us understand these UDF types with examples in the further sections of the a
 The User-Defined Functions (UDFs) are created using a CREATE FUNCTION command. Below is the syntax to create UDFs in Snowflake.
 
 ```sql
-CREATE OR REPLACE FUNCTION <name> ( [ <arg_name> <arg_data_type> ] [ , ... ] )
-RETURNS <result_data_type>
-LANGUAGE <language>
+CREATE OR REPLACE FUNCTION <NAME> ( [ <ARG_NAME> <ARG_DATA_TYPE> ] [ , ... ] )
+RETURNS <RESULT_DATA_TYPE>
+LANGUAGE <LANGUAGE>
 AS
    $$
-      <function_body>
+      <FUNCTION_BODY>
    $$
 ;
 ```
@@ -70,7 +70,7 @@ A User-defined function (UDF) or a User-defined table function (UDTF) can be cal
 A UDF can be called using a SELECT statement as shown below. If a UDF has arguments, you can specify those arguments by name or by position.
 
 ```sql
-SELECT udf_name(udf_arguments) ;
+SELECT UDF_NAME(UDF_ARGUMENTS) ;
 ```
 
 **Calling a UDTF:**
@@ -116,8 +116,8 @@ Consider below _`Sales`_ table as an example for demonstration purpose.
 
 ```sql
 CREATE OR REPLACE TABLE SALES(
-   sale_datetime TIMESTAMP,
-   sale_amount NUMBER(19,4)
+   SALE_DATETIME TIMESTAMP,
+   SALE_AMOUNT NUMBER(19,4)
 );
 
 INSERT INTO SALES VALUES
@@ -131,8 +131,8 @@ The same UDF _`get_date`_ created in example-1 is used for converting the dateti
 
 ```sql
 SELECT
-   get_date(sale_datetime) AS sale_date,
-   sale_amount
+   GET_DATE(SALE_DATETIME) AS SALE_DATE,
+   SALE_AMOUNT
 FROM SALES;
 ```
 
@@ -145,8 +145,8 @@ Output:
 The SQL query below is an example where UDF is applied on a field used in the WHERE clause of SELECT statement.
 
 ```sql
-SELECT * FROM sales
-WHERE  get_date(sale_datetime) > '2023-01-02';
+SELECT * FROM SALES
+WHERE  GET_DATE(SALE_DATETIME) > '2023-01-02';
 ```
 
 Output:
@@ -163,7 +163,7 @@ RETURNS NUMBER(19,4)
 LANGUAGE SQL
 AS
 $$
-    SELECT SUM(sale_amount) FROM SALES
+    SELECT SUM(SALE_AMOUNT) FROM SALES
 $$;
 ```
 
@@ -172,7 +172,7 @@ $$;
 Calling the UDF using SELECT.
 
 ```sql
-SELECT get_total_sales();
+SELECT GET_TOTAL_SALES();
 ```
 
 Output:
@@ -190,10 +190,10 @@ While creating UDTFs using CREATE FUNCTION command, the `<_result_data_type>_` s
 Consider below tables _`sales_by_country`_, _`currency`_ as an example for demonstration purpose.
 
 ```sql
-CREATE OR REPLACE TABLE sales_by_country(
-year NUMBER(4),
-country VARCHAR(50),
-sale_amount NUMBER
+CREATE OR REPLACE TABLE SALES_BY_COUNTRY(
+YEAR NUMBER(4),
+COUNTRY VARCHAR(50),
+SALE_AMOUNT NUMBER
 );
 
 INSERT INTO SALES_BY_COUNTRY VALUES
@@ -204,9 +204,9 @@ INSERT INTO SALES_BY_COUNTRY VALUES
 ('2023','UK','80000'),
 ('2023','FR','70000');
 
-CREATE OR REPLACE TABLE currency(
-country VARCHAR(50),
-currency VARCHAR(3)
+CREATE OR REPLACE TABLE CURRENCY(
+COUNTRY VARCHAR(50),
+CURRENCY VARCHAR(3)
 );
 
 INSERT INTO CURRENCY VALUES
@@ -224,9 +224,9 @@ CREATE OR REPLACE FUNCTION get_sales(country_name VARCHAR)
 RETURNS TABLE (year NUMBER, sale_amount NUMBER, country VARCHAR)
 AS
 $$
-    SELECT year, sale_amount, country
-    FROM sales_by_country
-    WHERE country = country_name
+    SELECT YEAR, SALE_AMOUNT, COUNTRY
+    FROM SALES_BY_COUNTRY
+    WHERE COUNTRY = COUNTRY_NAME
 $$
 ;
 ```
@@ -234,12 +234,12 @@ $$
 Calling the UDTF to return the data of **US** country.
 
 ```sql
-SELECT * FROM TABLE(get_sales('US'));
+SELECT * FROM TABLE(GET_SALES('US'));
 ```
 
 Output:
 
-| **YEAR** | **SALES\_AMOUNT** | **COUNTRY** |
+| **YEAR** | **SALES_AMOUNT** | **COUNTRY** |
 | --- | --- | --- |
 | 2022 | 90000 | US |
 | 2023 | 100000 | US |
@@ -253,11 +253,11 @@ CREATE OR REPLACE FUNCTION get_sales_with_currency(country_name VARCHAR)
 RETURNS TABLE (year NUMBER, sale_amount NUMBER, country VARCHAR, currency VARCHAR)
 AS
 $$
-    SELECT a.year, a.sale_amount, a.country, b.currency
-    FROM sales_by_country a
-    JOIN currency b
-    ON a.country = b.country
-    WHERE a.country = country_name
+    SELECT A.YEAR, A.SALE_AMOUNT, A.COUNTRY, B.CURRENCY
+    FROM SALES_BY_COUNTRY A
+    JOIN CURRENCY B
+    ON A.COUNTRY = B.COUNTRY
+    WHERE A.COUNTRY = COUNTRY_NAME
 $$
 ;
 ```
@@ -265,7 +265,7 @@ $$
 Calling the UDTF to return the data of **US** country.
 
 ```sql
-SELECT * FROM TABLE(get_sales_with_currency ('US'));
+SELECT * FROM TABLE(GET_SALES_WITH_CURRENCY ('US'));
 ```
 
 Output:
@@ -280,10 +280,10 @@ Output:
 The below SQL statement is an example where data from a UDTF (_`get_sales`_) is joined with a table (_`Currency`_).
 
 ```sql
-SELECT a.year, a.sale_amount, a.country, b.currency
-FROM TABLE(get_sales('US')) a
-JOIN currency b
-ON a.country = b.country
+SELECT A.YEAR, A.SALE_AMOUNT, A.COUNTRY, B.CURRENCY
+FROM TABLE(GET_SALES('US')) A
+JOIN CURRENCY B
+ON A.COUNTRY = B.COUNTRY
 ;
 ```
 
@@ -313,11 +313,11 @@ Output:
 -   A stored procedure is called as an independent statement whereas a UDF is always called inside the context of a SELECT statement.
 
 ```sql
-SELECT MyStoredProcedure(argument_1);  -- Not Supported
+SELECT MYSTOREDPROCEDURE(ARGUMENT_1);  -- NOT SUPPORTED
 
-CALL MyStoredProcedure(argument_1);
+CALL MYSTOREDPROCEDURE(ARGUMENT_1);
 
-SELECT MyUDF(column_1) FROM table1;
+SELECT MYUDF(COLUMN_1) FROM TABLE1;
 ```
 
 **5. Multiple UDFs may be called within one statement. A Single Stored Procedure is called as one statement.**
@@ -325,7 +325,7 @@ SELECT MyUDF(column_1) FROM table1;
 -   A single executable statement can call only one stored procedure. In contrast, a single SQL statement can call multiple functions.
 
 ```sql
-CALL MyStoredProcedure(argument_1);
+CALL MYSTOREDPROCEDURE(ARGUMENT_1);
 
-SELECT MyUDF_1(column_1), MyUDF_2(column_2)  FROM table1;
+SELECT MYUDF_1(COLUMN_1), MYUDF_2(COLUMN_2)  FROM TABLE1;
 ```
